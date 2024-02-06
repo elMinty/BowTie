@@ -63,4 +63,7 @@ public class ShapeController{
     }
 
 
+    public Pane getRoot() {
+        return root;
+    }
 }
