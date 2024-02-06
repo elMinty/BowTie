@@ -1,45 +1,52 @@
 package project.bowtie.App.Controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+
+//import project.bowtie.App.Controllers.ViewPane.ShapeController;
+import project.bowtie.App.Controllers.ViewPane.ShapeController;
+import project.bowtie.App.Controllers.ViewPane.Menus.ViewPaneContextMenu;
 
 public class ViewPaneController {
 
-    @FXML
-    public AnchorPane root;
-
-
-    // Event handler for Option 1
-    @FXML
-    private void handleOption1(ActionEvent event) {
-        System.out.println("Option 1 selected");
-        // Add your logic here
-    }
-
-    // Event handler for Option 2
-    @FXML
-    private void handleOption2(ActionEvent event) {
-        System.out.println("Option 2 selected");
-        // Add your logic here
-    }
 
     @FXML
+    public AnchorPane root; // establish the root of the view pane
+
+    private final ViewPaneContextMenu contextMenuBuilder = new ViewPaneContextMenu(); //establish the context menu
+    private ContextMenu contextMenu;
+    public ShapeController sc;
+
+    @FXML
+
+
     public void initialize() {
-        ContextMenu contextMenu = new ContextMenu();
+        sc = new ShapeController(root);;
+        setContextMenu();
 
-        MenuItem item1 = new MenuItem("Option 1");
-        item1.setOnAction(this::handleOption1);
-        contextMenu.getItems().add(item1);
+    }
 
-        MenuItem item2 = new MenuItem("Option 2");
-        item2.setOnAction(this::handleOption2);
-        contextMenu.getItems().add(item2);
+    private void setContextMenu() {
 
-        // Attach context menu to AnchorPane
-        root.setOnContextMenuRequested(event -> contextMenu.show(root, event.getScreenX(), event.getScreenY()));
+        // Initialize the context menu
+        contextMenu = contextMenuBuilder.initContextMenu(sc);
+
+        // Set event handler for context menu request
+        root.setOnContextMenuRequested(event -> {
+            contextMenuBuilder.setCoordinates(event.getSceneX(), event.getSceneY());
+            contextMenu.show(root, event.getSceneX(), event.getSceneY());
+        });
+
+        // Set up left-click event listener to hide the context menu
+        root.setOnMouseClicked(event -> {
+            if (contextMenu != null && contextMenu.isShowing()) {
+                contextMenu.hide();
+            }
+        });
+
     }
 
 }
+
+

@@ -10,6 +10,10 @@ module project.bowtie {
 
     opens project.bowtie to javafx.fxml;
     exports project.bowtie;
-    exports project.bowtie.App.Controllers;
     opens project.bowtie.App.Controllers to javafx.fxml;
+    exports project.bowtie.App.Controllers.ViewPane;
+    opens project.bowtie.App.Controllers.ViewPane to javafx.fxml;
+    exports project.bowtie.App.Controllers;
+    exports project.bowtie.App.Controllers.ViewPane.Menus;
+    opens project.bowtie.App.Controllers.ViewPane.Menus to javafx.fxml;
 }
