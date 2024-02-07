@@ -1,14 +1,23 @@
 package project.bowtie.App.Controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.layout.AnchorPane;
 
 //import project.bowtie.App.Controllers.ViewPane.ShapeController;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import project.bowtie.App.Controllers.ViewPane.ShapeController;
 import project.bowtie.App.Controllers.ViewPane.Menus.ViewPaneContextMenu;
+import project.bowtie.BTApp;
+import project.bowtie.BTController;
+import project.bowtie.Model.BTmodel.Bowtie.Bowtie;
+import project.bowtie.Model.BTmodel.Nodes.Node;
+import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
-public class ViewPaneController {
+public class ViewPaneController{
 
 
     @FXML
@@ -18,12 +27,22 @@ public class ViewPaneController {
     private ContextMenu contextMenu;
     public ShapeController sc;
 
+    private Node topEvent;
+    private Bowtie bowtie;
+
+    private Scene scene;
+    private Stage stage;
+
     @FXML
 
 
-    public void initialize() {
+    public void initViewPane(Scene scene, Stage stage){
+        this.scene = scene;
+        this.stage = stage;
         sc = new ShapeController(root);;
         setContextMenu();
+        setTopEvent();
+
 
     }
 
@@ -45,6 +64,18 @@ public class ViewPaneController {
             }
         });
 
+    }
+
+    //set up the top event
+    private void setTopEvent() {
+
+        sc.handleAddNode(NodeType.TOP_EVENT, 900, 360);
+        topEvent = new Node("0", NodeType.TOP_EVENT, "Top Event");
+        bowtie = new Bowtie(topEvent);
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
 }

@@ -18,8 +18,12 @@ public class NodeFactory{
         String label = "";
         if (type != null) {
             switch (type) {
-                case TOP_EVENT, THREAT:
-                    shape = createThreatNode();
+                case TOP_EVENT:
+                    shape = createThreatNode(NodeType.TOP_EVENT);
+                    break;
+
+                case THREAT:
+                    shape = createThreatNode(NodeType.THREAT);
                     break;
 
                 case MITIGATION:
@@ -71,10 +75,10 @@ public class NodeFactory{
 
     }
 
-    public static Shape createThreatNode() {
+    public static Shape createThreatNode(NodeType type) {
         // Create a circle
         Circle circle = new Circle(50, 100, 15);
-        circle.setFill(Color.RED);
+
 
         // Create a triangle
         Polygon triangle = new Polygon();
@@ -83,11 +87,17 @@ public class NodeFactory{
                 0.0, 200.0,   // Left corner of the triangle
                 100.0, 200.0  // Right corner of the triangle
         });
-        triangle.setFill(Color.RED);
+
 
         // Combine the circle and triangle into a single Shape
         Shape combinedShape = Shape.union(circle, triangle);
         combinedShape.setRotate(-90);     // Rotate the shape
+
+        if (type == NodeType.TOP_EVENT) {
+            combinedShape.setFill(Color.BLACK);
+        } else if (type == NodeType.THREAT) {
+            combinedShape.setFill(Color.RED);
+        }
 
         // Label is not a property of Shape, so you would need to handle it separately
         String label = "Threat";

@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
 
@@ -23,6 +24,8 @@ public class DragController {
     private final int INACTIVE = 0;
     private int cycleStatus = INACTIVE;
     private BooleanProperty isDraggable;
+
+
     public DragController(Node target) {
         this(target, false);
     }
@@ -55,6 +58,9 @@ public class DragController {
             if (cycleStatus != INACTIVE) {
                 target.setTranslateX(event.getSceneX() - anchorX);
                 target.setTranslateY(event.getSceneY() - anchorY);
+                // Additional logic to update the label's position
+
+
             }
         };
         commitPositionOnRelease = event -> {
@@ -65,6 +71,7 @@ public class DragController {
                 //clear changes from TranslateX and TranslateY
                 target.setTranslateX(0);
                 target.setTranslateY(0);
+
             }
         };
     }
@@ -90,4 +97,5 @@ public class DragController {
     public BooleanProperty isDraggableProperty() {
         return isDraggable;
     }
+
 }

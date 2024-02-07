@@ -2,18 +2,11 @@ package project.bowtie.App.Controllers.ViewPane.Menus;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
 
-import javafx.scene.layout.Pane;
-import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
 
-import project.bowtie.App.Controllers.DragController;
 import project.bowtie.App.Controllers.ViewPane.ShapeController;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
-import org.controlsfx.control.textfield.CustomTextField;
-import javafx.scene.control.TextArea;
-import org.controlsfx.control.textfield.TextFields;
+
 
 public class AddMenu {
 
@@ -26,7 +19,7 @@ public class AddMenu {
         this.sc = sc;
         // Add the Node submenu directly
         initNodeMenu();
-        initTextBox();
+        //initTextBox();
 
 
         return addMenu;
@@ -40,7 +33,7 @@ public class AddMenu {
     public void initNodeMenu() {
         // Menu items
         Menu nodeMenu = new Menu("Node");
-        MenuItem topEvent = new MenuItem("Top Event");
+        //MenuItem topEvent = new MenuItem("Top Event");
         MenuItem exposure = new MenuItem("Exposure");
         MenuItem threat = new MenuItem("Threat");
         MenuItem mitigation = new MenuItem("Mitigation");
@@ -49,7 +42,7 @@ public class AddMenu {
         MenuItem vulnerability = new MenuItem("Vulnerability");
 
         // Event handlers for adding nodes
-        topEvent.setOnAction(event -> sc.handleAddNode(NodeType.TOP_EVENT,x, y));
+        //topEvent.setOnAction(event -> sc.handleAddNode(NodeType.TOP_EVENT,x, y));
         exposure.setOnAction(event -> sc.handleAddNode(NodeType.EXPOSURE,x, y));
         threat.setOnAction(event -> sc.handleAddNode(NodeType.THREAT,x, y));
         mitigation.setOnAction(event -> sc.handleAddNode(NodeType.MITIGATION,x, y));
@@ -58,7 +51,7 @@ public class AddMenu {
         vulnerability.setOnAction(event -> sc.handleAddNode(NodeType.VULNERABILITY,x, y));
 
         nodeMenu.getItems().addAll(
-                topEvent,
+                //topEvent,
                 exposure,
                 threat,
                 mitigation,
@@ -69,29 +62,27 @@ public class AddMenu {
         addMenu.getItems().add(nodeMenu);
     }
 
-    public void initTextBox() {
-        // Add Text Box menu item
-        MenuItem textBoxItem = new MenuItem("Text");
-        textBoxItem.setOnAction(e -> {
-            TextArea textArea = new TextArea();
-            textArea.setWrapText(true);
-            textArea.setStyle("-fx-control-inner-background: #ffff99; " +  // Post-it yellow
-                    "-fx-font-family: 'Arial'; " +             // Font style
-                    "-fx-border-color: #cccc33; " +            // Border color
-                    "-fx-border-width: 2; " +                  // Border width
-                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 10);"); // Shadow effect
-
-            CustomTextField customTextField = (CustomTextField) TextFields.createClearableTextField();
-            customTextField.setRight(textArea);
-
-            DragController dragController = new DragController(customTextField, true);
-            // Note: You'll need to determine how to access the parent container in your application
-            Pane root = sc.getRoot();
-            root.getChildren().add(customTextField);
-        });
-        addMenu.getItems().add(textBoxItem);
-
-    }
+//    public void initTextBox() {
+//        MenuItem textBoxItem = new MenuItem("Text");
+//        textBoxItem.setOnAction(e -> {
+////            TextArea textArea = new TextArea();
+////            textArea.setWrapText(true);
+////            // Apply desired styles to the text area
+////            textArea.setStyle("-fx-control-inner-background: #ffff99; " +  // Post-it yellow
+////                    "-fx-font-family: 'Arial'; " +             // Font style
+////                    "-fx-border-color: #cccc33; " +            // Border color
+////                    "-fx-border-width: 2; " +                  // Border width
+////                    "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 10);"); // Shadow effect
+//
+//            // Create a TextBox instance with the styled TextArea
+//            TextArea textBox = new TextBox().getTextArea();
+//
+//            // Access the parent container where you want to add the TextBox
+//            Pane root = sc.getRoot();
+//            root.getChildren().add(textBox); // Add the TextBox to the root pane
+//        });
+//        addMenu.getItems().add(textBoxItem);
+//    }
 
 
 
