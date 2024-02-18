@@ -4,18 +4,18 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 
 
-import project.bowtie.App.Controllers.ViewPane.ShapeController;
+import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
 
 public class AddMenu {
 
     double x, y;
-    ShapeController sc;
+    NodeController sc;
 
     private Menu addMenu = new Menu("Add");
 
-    public Menu initAddMenu(ShapeController sc) {
+    public Menu initAddMenu(NodeController sc) {
         this.sc = sc;
         // Add the Node submenu directly
         initNodeMenu();

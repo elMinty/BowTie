@@ -1,5 +1,6 @@
 package project.bowtie.App.Controllers.ViewPane;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
@@ -7,25 +8,56 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.DragController;
+import project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode;
 import project.bowtie.App.Controllers.ViewPane.Menus.ShapeContextMenu;
+import project.bowtie.App.Controllers.ViewPane.Obj.Connector;
 import project.bowtie.App.Controllers.ViewPane.Obj.NodeFactory;
+import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class ShapeController{
+public class NodeController {
 
     Pane root;
     NodeFactory nf = new NodeFactory();
     ShapeContextMenu shapeContextMenu;
 
-    public ShapeController(AnchorPane root) {
+    // Map to hold Pane -> Data associations
+    private Map<String, Node> nodeMap = new HashMap<String, Node>();
+    private int nodeCount = 0;
+
+    public Connector connector;
+
+
+    public NodeController(AnchorPane root) {
         this.root = root;
+
         shapeContextMenu = new ShapeContextMenu(this);
+        connector = new Connector(nodeMap);
     }
 
     public void handleDelete(Shape shape) {
-        root.getChildren().remove(shape);
+        if (shape.getUserData() != null) {
+            Node node = (Node) shape.getUserData();
+            if (node.getType() == NodeType.TOP_EVENT) {
+                // keep the top event and show a warning
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText("TopEvent");
+                alert.setContentText("Top Event cannot be deleted.");
+
+                alert.showAndWait();
+            }
+
+            else {
+                // Otherwise, remove it from the node map
+                nodeMap.remove(node.getId());
+                root.getChildren().remove(shape);
+            }
+        }
     }
 
     public void handleScale(Shape shape) {
@@ -50,21 +82,47 @@ public class ShapeController{
     public void handleAddNode(NodeType type, double x, double y) {
 
         Shape shape = NodeFactory.createNode(type);
-        DragController dragController = new DragController(shape, true);
 
+        // controllers and listeners
+        DragController dragController = new DragController(shape, true);
+        setNodeListeners(shape);
+
+
+        Label infoLabel = setLabel(shape, "Top Event: Client Data Leak");
+        Node node = new Node(String.valueOf(nodeCount), type, type.toString() + nodeCount);
+
+        // Set the shape's position
+        shape.setLayoutX(x);
+        shape.setLayoutY(y);
+
+        // link pane and node
+        shape.setId(node.getId());
+        shape.setUserData(node);
+        nodeMap.put(node.getId(), node);
+
+        // update node count
+        nodeCount++;
+
+        // Add the shape to the root
+        root.getChildren().addAll(shape, infoLabel);
+
+    }
+
+    private void setNodeListeners(Shape shape) {
         shape.setOnContextMenuRequested(event -> {
             shapeContextMenu.showContextMenu(shape, event.getScreenX(), event.getScreenY());
             event.consume();  // Add this line to consume the event
         });
 
-        Label infoLabel = setLabel(shape, "Info about the node");
-
-
-
-        shape.setLayoutX(x);
-        shape.setLayoutY(y);
-        root.getChildren().addAll(shape, infoLabel);
-
+        // Check if connect mode is enabled
+        shape.setOnMouseClicked(event -> {
+            if (connector.getConnectMode()) {
+                String targetNodeId = shape.getId(); // currentNode represents the node that opened the context menu
+                System.out.println("Source Node ID: " + targetNodeId);
+                connector.setTargetNodeId(targetNodeId);
+                connector.flush();
+            }
+        });
     }
 
     private Label setLabel(Shape shape, String label) {
@@ -99,7 +157,12 @@ public class ShapeController{
         return infoLabel;
 
     }
+
     public Pane getRoot() {
         return root;
+    }
+
+    public Node getNode(String id) {
+        return nodeMap.get(id);
     }
 }

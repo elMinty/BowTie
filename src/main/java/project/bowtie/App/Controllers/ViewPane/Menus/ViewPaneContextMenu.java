@@ -2,19 +2,19 @@ package project.bowtie.App.Controllers.ViewPane.Menus;
 
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import project.bowtie.App.Controllers.ViewPane.ShapeController;
+import project.bowtie.App.Controllers.ViewPane.NodeController;
 
 public class ViewPaneContextMenu{
 
 
     double x, y;
-    ShapeController sc;
+    NodeController sc;
 
 
     AddMenu addMenu = new AddMenu();
 
     // Factory method to create the main context menu
-    public ContextMenu initContextMenu(ShapeController sc) {
+    public ContextMenu initContextMenu(NodeController sc) {
 
         this.sc = sc;
         ContextMenu contextMenu = new ContextMenu();

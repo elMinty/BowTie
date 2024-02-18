@@ -1,13 +1,11 @@
 package project.bowtie.App.Controllers.ViewPane.Obj;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-import project.bowtie.App.Controllers.ViewPane.ShapeController;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
 public class NodeFactory{
