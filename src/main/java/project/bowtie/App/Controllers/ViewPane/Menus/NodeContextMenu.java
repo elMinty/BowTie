@@ -6,14 +6,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 
-public class ShapeContextMenu {
+public class NodeContextMenu {
 
     private ContextMenu contextMenu;
     private Shape shape;
     NodeController nc;
 
 
-    public ShapeContextMenu(NodeController nc) {
+    public NodeContextMenu(NodeController nc) {
 
         this.nc = nc;
 
@@ -37,7 +37,6 @@ public class ShapeContextMenu {
 
     public void showContextMenu(Shape shape, double x, double y) {
         this.shape = shape;
-        System.out.println("ShapeContextMenu.showContextMenu: shape = " + shape);
         contextMenu.show(shape, x, y);
     }
 
@@ -46,27 +45,37 @@ public class ShapeContextMenu {
         Menu connectMenu = new Menu("Connect");
         MenuItem connectBefore = new MenuItem("Connect Before");
         MenuItem connectAfter = new MenuItem("Connect After");
+        MenuItem disconnect = new MenuItem("Disconnect");
 
 
         connectAfter.setOnAction(e -> {
             nc.connector.setConnectMode(true);
             String sourceNodeId = shape.getId(); // currentNode represents the node that opened the context menu
-            System.out.println("Source Node ID: " + sourceNodeId);
             // Additional actions to indicate the application is in connection mode, if necessary
             nc.connector.setConnectType(ConnectionMode.AFTER);
             nc.connector.setSourceNodeId(sourceNodeId);
+            nc.connector.setSourceShape(shape);
         });
 
         connectBefore.setOnAction(e -> {
             nc.connector.setConnectMode(true);
             String sourceNodeId = shape.getId(); // currentNode represents the node that opened the context menu
-            System.out.println("Source Node ID: " + sourceNodeId);
             // Additional actions to indicate the application is in connection mode, if necessary
             nc.connector.setConnectType(ConnectionMode.BEFORE);
             nc.connector.setSourceNodeId(sourceNodeId);
+            nc.connector.setSourceShape(shape);
         });
 
-        connectMenu.getItems().addAll(connectBefore, connectAfter);
+        disconnect.setOnAction(e -> {
+            nc.connector.setConnectMode(true);
+            String sourceNodeId = shape.getId(); // currentNode represents the node that opened the context menu
+            // Additional actions to indicate the application is in connection mode, if necessary
+            nc.connector.setConnectType(ConnectionMode.DISCONNECT);
+            nc.connector.setSourceNodeId(sourceNodeId);
+            nc.connector.setSourceShape(shape);
+        });
+
+        connectMenu.getItems().addAll(connectBefore, connectAfter, disconnect);
         contextMenu.getItems().add(connectMenu);
 
         return connectMenu;

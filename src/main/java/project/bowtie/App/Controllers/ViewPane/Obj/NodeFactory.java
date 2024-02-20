@@ -65,6 +65,15 @@ public class NodeFactory{
                     shape.setFill(Color.BLACK);
                     label = "Vulnerability";
                     break;
+
+                case AND:
+                    // LOGICAL AND - BLACK OUTLINED small circle
+                    shape = new Circle(10);
+                    shape.setFill(Color.WHITE);
+                    shape.setStroke(Color.BLACK);
+                    shape.setStrokeWidth(2);
+                    label = "AND";
+                    break;
             }
         }
 

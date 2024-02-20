@@ -10,13 +10,14 @@ import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
 public class AddMenu {
 
+
     double x, y;
-    NodeController sc;
+    NodeController nc;
 
     private Menu addMenu = new Menu("Add");
 
     public Menu initAddMenu(NodeController sc) {
-        this.sc = sc;
+        this.nc = sc;
         // Add the Node submenu directly
         initNodeMenu();
         //initTextBox();
@@ -40,15 +41,17 @@ public class AddMenu {
         MenuItem counterMitigation = new MenuItem("Counter Mitigation");
         MenuItem action = new MenuItem("Action");
         MenuItem vulnerability = new MenuItem("Vulnerability");
+        MenuItem and = new MenuItem("AND");
 
         // Event handlers for adding nodes
         //topEvent.setOnAction(event -> sc.handleAddNode(NodeType.TOP_EVENT,x, y));
-        exposure.setOnAction(event -> sc.handleAddNode(NodeType.EXPOSURE,x, y));
-        threat.setOnAction(event -> sc.handleAddNode(NodeType.THREAT,x, y));
-        mitigation.setOnAction(event -> sc.handleAddNode(NodeType.MITIGATION,x, y));
-        counterMitigation.setOnAction(event -> sc.handleAddNode(NodeType.COUNTER_MITIGATION,x, y));
-        action.setOnAction(event -> sc.handleAddNode(NodeType.ACTION,x, y));
-        vulnerability.setOnAction(event -> sc.handleAddNode(NodeType.VULNERABILITY,x, y));
+        exposure.setOnAction(event -> nc.handleAddNode(NodeType.EXPOSURE,x, y));
+        threat.setOnAction(event -> nc.handleAddNode(NodeType.THREAT,x, y));
+        mitigation.setOnAction(event -> nc.handleAddNode(NodeType.MITIGATION,x, y));
+        counterMitigation.setOnAction(event -> nc.handleAddNode(NodeType.COUNTER_MITIGATION,x, y));
+        action.setOnAction(event -> nc.handleAddNode(NodeType.ACTION,x, y));
+        vulnerability.setOnAction(event -> nc.handleAddNode(NodeType.VULNERABILITY,x, y));
+        and.setOnAction(event -> nc.handleAddNode(NodeType.AND,x, y));
 
         nodeMenu.getItems().addAll(
                 //topEvent,
@@ -57,7 +60,8 @@ public class AddMenu {
                 mitigation,
                 counterMitigation,
                 action,
-                vulnerability
+                vulnerability,
+                and
         );
         addMenu.getItems().add(nodeMenu);
     }

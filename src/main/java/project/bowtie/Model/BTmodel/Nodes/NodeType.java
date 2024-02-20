@@ -8,5 +8,6 @@ public enum NodeType {
     EXPOSURE,
     ACTION,
     VULNERABILITY,
+    AND,
     NONE
 }

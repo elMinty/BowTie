@@ -115,4 +115,31 @@ public class Node {
     public Map<String, Node> getMitigationNodes() {
         return mitigationNodes;
     }
+
+    // print and testing
+
+    public void listAdjoiningNodes() {
+        // create a string list of the node ids and types that become before and after nodes
+        // in format before: {(id, type), (id, type), ...}
+
+        StringBuilder before = new StringBuilder();
+        StringBuilder after = new StringBuilder();
+
+        for (Node node : beforeNodes.values()) {
+            before.append("(").append(node.getId()).append(", ").append(node.getType()).append("), ");
+        }
+
+        for (Node node : afterNodes.values()) {
+            after.append("(").append(node.getId()).append(", ").append(node.getType()).append("), ");
+        }
+
+        System.out.println("Before: {" + before + "}");
+
+        System.out.println("After: {" + after + "}");
+
+
+
+
+
+    }
 }

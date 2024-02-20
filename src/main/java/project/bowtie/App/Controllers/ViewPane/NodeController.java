@@ -8,12 +8,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.DragController;
-import project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode;
-import project.bowtie.App.Controllers.ViewPane.Menus.ShapeContextMenu;
+import project.bowtie.App.Controllers.ViewPane.Menus.NodeContextMenu;
 import project.bowtie.App.Controllers.ViewPane.Obj.Connector;
 import project.bowtie.App.Controllers.ViewPane.Obj.NodeFactory;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
+import project.bowtie.Model.BTmodel.Nodes.NodeUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class NodeController {
 
     Pane root;
     NodeFactory nf = new NodeFactory();
-    ShapeContextMenu shapeContextMenu;
+    NodeContextMenu nodeContextMenu;
 
     // Map to hold Pane -> Data associations
     private Map<String, Node> nodeMap = new HashMap<String, Node>();
@@ -35,7 +35,7 @@ public class NodeController {
     public NodeController(AnchorPane root) {
         this.root = root;
 
-        shapeContextMenu = new ShapeContextMenu(this);
+        nodeContextMenu = new NodeContextMenu(this);
         connector = new Connector(nodeMap);
     }
 
@@ -54,7 +54,20 @@ public class NodeController {
 
             else {
                 // Otherwise, remove it from the node map
+
+                // Check for all connections BEFORE AND AFTER and disconnect - deleting all connecting lines
+                for (Node beforeNode : node.getBeforeNodes().values()) {
+                    if (beforeNode != null) {
+                        connector.disconnect(beforeNode.getId(), node.getId());
+                    }
+                }
+                for (Node afterNode : node.getAfterNodes().values()) {
+                    if (afterNode != null) {
+                        connector.disconnect(node.getId(), afterNode.getId());
+                    }
+                }
                 nodeMap.remove(node.getId());
+                NodeUtils.delete(node);
                 root.getChildren().remove(shape);
             }
         }
@@ -77,6 +90,7 @@ public class NodeController {
             }
         });
     }
+
 
 
     public void handleAddNode(NodeType type, double x, double y) {
@@ -110,7 +124,7 @@ public class NodeController {
 
     private void setNodeListeners(Shape shape) {
         shape.setOnContextMenuRequested(event -> {
-            shapeContextMenu.showContextMenu(shape, event.getScreenX(), event.getScreenY());
+            nodeContextMenu.showContextMenu(shape, event.getScreenX(), event.getScreenY());
             event.consume();  // Add this line to consume the event
         });
 
@@ -118,9 +132,8 @@ public class NodeController {
         shape.setOnMouseClicked(event -> {
             if (connector.getConnectMode()) {
                 String targetNodeId = shape.getId(); // currentNode represents the node that opened the context menu
-                System.out.println("Source Node ID: " + targetNodeId);
                 connector.setTargetNodeId(targetNodeId);
-                connector.flush();
+                connector.flush(shape);
             }
         });
     }
