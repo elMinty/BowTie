@@ -10,6 +10,8 @@ public class Node {
     private Map<String, Node> beforeNodes; // Maps IDs to NodeFactory leading to this node
     private Map<String, Node> afterNodes;  // Maps IDs to NodeFactory that this node leads to
     private Map<String, Node> mitigationNodes; // NodeFactory that mitigate this node
+    private String description;
+    private String quantifier;
 
     public Node(String ID, NodeType type, String name) {
         this.type = type;
@@ -18,6 +20,8 @@ public class Node {
         this.beforeNodes = new HashMap<>();
         this.afterNodes = new HashMap<>();
         this.mitigationNodes = new HashMap<>();
+        this.description = "";
+        this.quantifier = null;
 
     }
 
@@ -72,6 +76,14 @@ public class Node {
         return beforeNodes;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getQuantifier() {
+        return quantifier;
+    }
+
     // setters
 
     public void setType(NodeType type) {
@@ -84,6 +96,14 @@ public class Node {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setQuantifier(String quantifier) {
+        this.quantifier = quantifier;
     }
 
     // Logic for adding and removing nodes
@@ -136,10 +156,6 @@ public class Node {
         System.out.println("Before: {" + before + "}");
 
         System.out.println("After: {" + after + "}");
-
-
-
-
 
     }
 }

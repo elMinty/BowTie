@@ -1,8 +1,6 @@
 package project.bowtie.App.Controllers.ViewPane;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -14,6 +12,7 @@ import project.bowtie.App.Controllers.ViewPane.Obj.NodeFactory;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 import project.bowtie.Model.BTmodel.Nodes.NodeUtils;
+import project.bowtie.App.Controllers.ViewPane.Obj.Node_Detail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +29,8 @@ public class NodeController {
     private int nodeCount = 0;
 
     public Connector connector;
+
+    private String userInput = "";
 
 
     public NodeController(AnchorPane root) {
@@ -102,8 +103,9 @@ public class NodeController {
         setNodeListeners(shape);
 
 
-        Label infoLabel = setLabel(shape, "Top Event: Client Data Leak");
+
         Node node = new Node(String.valueOf(nodeCount), type, type.toString() + nodeCount);
+
 
         // Set the shape's position
         shape.setLayoutX(x);
@@ -114,11 +116,16 @@ public class NodeController {
         shape.setUserData(node);
         nodeMap.put(node.getId(), node);
 
+        Label nameLabel = setLabelName(shape, node.getName());
+        Label infoLabel = setInfoLabel(shape, node.getDescription());
+
+        shape.setAccessibleText(node.getName());
+        shape.setAccessibleRoleDescription(node.getDescription());
         // update node count
         nodeCount++;
 
         // Add the shape to the root
-        root.getChildren().addAll(shape, infoLabel);
+        root.getChildren().addAll(shape, infoLabel, nameLabel);
 
     }
 
@@ -138,7 +145,7 @@ public class NodeController {
         });
     }
 
-    private Label setLabel(Shape shape, String label) {
+    private Label setInfoLabel(Shape shape, String label) {
         Label infoLabel = new Label();
         // Setup the information label (but don't add it to the scene yet)
         infoLabel.setText(label);
@@ -171,6 +178,62 @@ public class NodeController {
 
     }
 
+    public Label setLabelName(Shape shape, String name) {
+
+        // Sets the nodes name - displays the name as text based on the shape's position
+        // create label that displays the name of the node on the shape position
+
+        Node node = (Node) shape.getUserData();
+        node.setName(name);
+
+        Label nameLabel = new Label();
+        // Setup the information label (but don't add it to the scene yet)
+        nameLabel.setText(name);
+
+        return nameLabel;
+
+    }
+
+    public void handleEdit(Shape shape, Node_Detail detail) {
+
+        // gets a window popup for entering a string to edit the node's name, description, or quantifier
+
+
+        switch (detail) {
+            case NAME:
+                getUserText();
+                setLabelName(shape, userInput);
+                resetUserInput();
+                break;
+            case DESCRIPTION:
+
+                break;
+            case QUANTIFIER:
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void handleView(Shape shape, Node_Detail detail) {
+
+
+        switch (detail) {
+            case NAME:
+                break;
+            case DESCRIPTION:
+
+                break;
+            case QUANTIFIER:
+
+                break;
+            default:
+                break;
+        }
+    }
+
+
     public Pane getRoot() {
         return root;
     }
@@ -178,4 +241,38 @@ public class NodeController {
     public Node getNode(String id) {
         return nodeMap.get(id);
     }
+
+    private void resetUserInput() {
+        userInput = "";
+    }
+
+    public void getUserText() {
+
+
+        // Create a TextField for user input
+        TextField textField = new TextField();
+        textField.setPromptText("Enter your text here");
+        textField.setLayoutX(100); // Set X position
+        textField.setLayoutY(100); // Set Y position
+
+        // Create a Button to submit the input
+        Button submitButton = new Button("Submit");
+        submitButton.setLayoutX(250); // Set X position
+        submitButton.setLayoutY(100); // Set Y position
+
+        // Add an event handler to the button
+        submitButton.setOnAction(event -> {
+            // Get the text from the TextField
+            userInput = textField.getText();
+
+            // Remove the TextField and Button from the scene
+            root.getChildren().removeAll(textField, submitButton);
+        });
+
+        // Add the TextField and Button to the Pane
+        root.getChildren().addAll(textField, submitButton);
+
+    }
+
+
 }

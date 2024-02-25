@@ -5,6 +5,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
+import project.bowtie.App.Controllers.ViewPane.Obj.Node_Detail;
 
 public class NodeContextMenu {
 
@@ -31,6 +32,8 @@ public class NodeContextMenu {
         Menu ConnectMenu = new Menu("Connect");
 
         contextMenu.getItems().addAll(deleteItem, scaleItem);
+
+        initDetailsMenu();
 
         initConnectMenu();
     }
@@ -79,6 +82,45 @@ public class NodeContextMenu {
         contextMenu.getItems().add(connectMenu);
 
         return connectMenu;
+    }
+
+    public void initDetailsMenu() {
+        // Menu items
+        Menu detailsMenu = new Menu("Details");
+        Menu editDetails = new Menu("Edit Details");
+        Menu viewDetails = new Menu("View Details");
+
+        // Menu items for edit and view
+        MenuItem editName = new MenuItem("Edit Name");
+        MenuItem editDescription = new MenuItem("Edit Description");
+        MenuItem editQuantifier = new MenuItem("Edit Type");
+
+        MenuItem viewName = new MenuItem("View Name");
+        MenuItem viewDescription = new MenuItem("View Description");
+        MenuItem viewType = new MenuItem("View Type");
+
+
+        // handlers using handleEdit(shape, detail) and handleView(shape, detail)
+
+        editName.setOnAction(e -> nc.handleEdit(shape, Node_Detail.NAME));
+        editDescription.setOnAction(e -> nc.handleEdit(shape, Node_Detail.DESCRIPTION));
+        editQuantifier.setOnAction(e -> nc.handleEdit(shape, Node_Detail.QUANTIFIER));
+
+        viewName.setOnAction(e -> nc.handleView(shape, Node_Detail.NAME));
+        viewDescription.setOnAction(e -> nc.handleView(shape, Node_Detail.DESCRIPTION));
+        viewType.setOnAction(e -> nc.handleView(shape, Node_Detail.QUANTIFIER));
+
+        editDetails.getItems().addAll(editName, editDescription, editQuantifier);
+
+        viewDetails.getItems().addAll(viewName, viewDescription, viewType);
+
+        detailsMenu.getItems().addAll(editDetails, viewDetails);
+
+        contextMenu.getItems().add(detailsMenu);
+
+
+
+
     }
 
 }
