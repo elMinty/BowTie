@@ -26,6 +26,8 @@ public class DragController {
     private BooleanProperty isDraggable;
 
 
+
+
     public DragController(Node target) {
         this(target, false);
     }
@@ -44,7 +46,7 @@ public class DragController {
             if (event.isPrimaryButtonDown()) {
                 cycleStatus = ACTIVE;
                 anchorX = event.getSceneX();
-                anchorY = event.getSceneY();
+                anchorY = event.getY();
                 mouseOffsetFromNodeZeroX = event.getX();
                 mouseOffsetFromNodeZeroY = event.getY();
             }
@@ -56,8 +58,8 @@ public class DragController {
         };
         updatePositionOnDrag = event -> {
             if (cycleStatus != INACTIVE) {
-                target.setTranslateX(event.getSceneX() - anchorX);
-                target.setTranslateY(event.getSceneY() - anchorY);
+                target.setTranslateX(event.getX() - anchorX);
+                target.setTranslateY(event.getY() - anchorY);
                 // Additional logic to update the label's position
 
 
@@ -66,8 +68,8 @@ public class DragController {
         commitPositionOnRelease = event -> {
             if (cycleStatus != INACTIVE) {
                 //commit changes to LayoutX and LayoutY
-                target.setLayoutX(event.getSceneX() - mouseOffsetFromNodeZeroX);
-                target.setLayoutY(event.getSceneY() - mouseOffsetFromNodeZeroY);
+                target.setLayoutX(event.getY() - mouseOffsetFromNodeZeroX);
+                target.setLayoutY(event.getY() - mouseOffsetFromNodeZeroY);
                 //clear changes from TranslateX and TranslateY
                 target.setTranslateX(0);
                 target.setTranslateY(0);

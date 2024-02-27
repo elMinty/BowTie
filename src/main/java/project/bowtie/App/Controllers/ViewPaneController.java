@@ -1,9 +1,11 @@
 package project.bowtie.App.Controllers;
 
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 
 //import project.bowtie.App.Controllers.ViewPane.NodeController;
@@ -13,6 +15,8 @@ import project.bowtie.App.Controllers.ViewPane.Menus.ViewPaneContextMenu;
 import project.bowtie.Model.BTmodel.Bowtie.Bowtie;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
+
+import javax.swing.event.ChangeListener;
 
 public class ViewPaneController{
 
@@ -29,7 +33,10 @@ public class ViewPaneController{
 
     private Scene scene;
     private Stage stage;
-    private ScrollPane scrollPane;
+
+
+    private double deltaX;
+    private double deltaY;
 
     @FXML
 
@@ -37,17 +44,12 @@ public class ViewPaneController{
     public void initViewPane(Scene scene, Stage stage){
         this.scene = scene;
         this.stage = stage;
+
+        //make background warm darker beige
+        root.setStyle("-fx-background-color: #ceb09a;");
         nc = new NodeController(root);;
         setContextMenu();
         addTopEvent();
-
-        root.setOnMouseClicked(event -> {
-
-            // print location of mouse click
-            System.out.println("X: " + event.getSceneX() + " Y: " + event.getSceneY());
-
-        });
-
 
     }
 
@@ -75,7 +77,7 @@ public class ViewPaneController{
     private void addTopEvent() {
 
         nc.handleAddNode(NodeType.TOP_EVENT, 900, 360);
-        Node topEvent = nc.getNode("0");
+        topEvent = nc.getNode("0");
         bowtie = new Bowtie(topEvent);
     }
 
@@ -88,9 +90,6 @@ public class ViewPaneController{
         this.scene = scene;
     }
 
-    public void setScrollPane(ScrollPane scrollPane) {
-        this.scrollPane = scrollPane;
-    }
 }
 
 

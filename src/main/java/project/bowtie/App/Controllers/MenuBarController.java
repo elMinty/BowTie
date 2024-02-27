@@ -3,6 +3,7 @@ package project.bowtie.App.Controllers;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
@@ -80,7 +81,7 @@ public class MenuBarController{
         stage.close();
     }
 
-    public void handleScreenshot(ActionEvent actionEvent) {
+    public void handleScreenshot(ActionEvent actionEvent) { // Include AnchorPane in the arguments
 
         FileChooser fileChooser = new FileChooser();
         // Set extension filter
@@ -91,9 +92,9 @@ public class MenuBarController{
 
         if (file != null) {
             try {
-                // Take screenshot of the scene or specific node
-                WritableImage writableImage = new WritableImage((int)scene.getWidth(), (int)scene.getHeight());
-                scene.snapshot(writableImage); // 'scene' should be the scene you want to capture
+                // Take screenshot of the AnchorPane
+                WritableImage writableImage = new WritableImage((int)viewPaneRoot.getWidth(), (int)viewPaneRoot.getHeight());
+                viewPaneRoot.snapshot(new SnapshotParameters(), writableImage); // Use the anchorPane for snapshot
 
                 // Save the screenshot
                 ImageIO.write(SwingFXUtils.fromFXImage(writableImage, null), "png", file);

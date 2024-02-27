@@ -34,6 +34,9 @@ public class NodeController {
 
     private String userInput = "";
 
+    public double deltaX;
+    public double deltaY;
+
 
     public NodeController(AnchorPane root) {
         this.root = root;
@@ -103,8 +106,10 @@ public class NodeController {
         Shape shape = NodeFactory.createNode(type);
 
         // controllers and listeners
-        DragController dragController = new DragController(shape, true);
+        //DragController dragController = new DragController(shape, true);
         setNodeListeners(shape);
+
+
 
 
 
@@ -142,6 +147,29 @@ public class NodeController {
     }
 
     private void setNodeListeners(Shape shape) {
+        // Drag and drop listeners
+
+        // Initial drag offset
+        final double[] offsetX = {0};
+        final double[] offsetY = {0};
+
+        // Set mouse pressed event
+        shape.setOnMousePressed(event -> {
+            // Calculate the offset from the top-left corner of the rectangle
+            offsetX[0] = event.getSceneX() - shape.getLayoutX();
+            offsetY[0] = event.getSceneY() - shape.getLayoutY();
+        });
+
+        // Set mouse dragged event
+        shape.setOnMouseDragged(event -> {
+            // Update the position of the rectangle
+            shape.setLayoutX(event.getSceneX() - offsetX[0]);
+            shape.setLayoutY(event.getSceneY() - offsetY[0]);
+        });
+
+        // Set context menu event
+
+
         shape.setOnContextMenuRequested(event -> {
             nodeContextMenu.showContextMenu(shape, event.getScreenX(), event.getScreenY());
             event.consume();  // Add this line to consume the event
@@ -162,6 +190,8 @@ public class NodeController {
         // gets a window popup for entering a string to edit the node's name, description, or quantifier
         double offsetX = shape.getLayoutX();
         double offsetY = shape.getLayoutY();
+
+
 
         // Create a TextField for user input
         TextField textField = new TextField();

@@ -16,7 +16,7 @@ public class BTController{
     public MenuBar menuBar;
     private Scene scene;
 
-    @FXML private ScrollPane scrollPane;
+
 
     @FXML private MenuBarController menuBarController;
 
@@ -26,7 +26,6 @@ public class BTController{
     public void initController(Scene scene, Stage stage) {
         this.scene = scene;
         if (viewPaneController != null) {
-            viewPaneController.setScrollPane(scrollPane);
             viewPaneController.initViewPane(scene, stage);
 
         }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane fx:id="root" prefHeight="3000" prefWidth="3000" xmlns="http://javafx.com/javafx/21"
+<AnchorPane fx:id="root" prefHeight="1500" prefWidth="3000" xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.bowtie.App.Controllers.ViewPaneController">
 
 </AnchorPane>

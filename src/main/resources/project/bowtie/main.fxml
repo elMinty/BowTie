@@ -14,9 +14,10 @@
       </VBox>
    </top>
    <center>
-      <ScrollPane prefHeight="3000" prefWidth="3000" BorderPane.alignment="CENTER">
-         <fx:include fx:id="viewPane" source="ViewPane.fxml" />
-      </ScrollPane>
+        <ScrollPane  BorderPane.alignment="CENTER" fx:id="scrollPane" prefViewportHeight="400.0" prefViewportWidth="400.0">
+           <fx:include fx:id="viewPane" source="ViewPane.fxml" />
+        </ScrollPane>
+
    </center>
    <bottom>
       <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />

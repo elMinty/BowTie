@@ -99,6 +99,11 @@ public class NodeContextMenu {
         Menu viewDescription = initViewDescription();
         Menu viewScore = initViewScore();
 
+        editName.setOnAction(e -> nc.handleEdit(shape, NodeDetail.NAME));
+        editDescription.setOnAction(e -> nc.handleEdit(shape, NodeDetail.DESCRIPTION));
+        editScore.setOnAction(e -> nc.handleEdit(shape, NodeDetail.SCORE));
+
+
 
 
 
