@@ -1,31 +1,27 @@
 package project.bowtie.App.Controllers;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import java.io.BufferedWriter;
-
-import javafx.embed.swing.SwingFXUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.IO.ShapeExporter;
 import project.bowtie.IO.ShapeImporter;
-
-import java.io.FileWriter;
-
+import project.bowtie.Model.BTmodel.Nodes.Node;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-
-import static project.bowtie.IO.ShapeImporter.importShapesFromXML;
 
 public class MenuBarController{
 
@@ -34,6 +30,7 @@ public class MenuBarController{
     private Stage stage;
     private AnchorPane viewPaneRoot;
     private NodeController nodeController;
+    private ViewPaneController viewPaneController;
 
 
     public void initMenuBar(Scene scene, Stage stage){
@@ -135,13 +132,23 @@ public class MenuBarController{
                 // clear the viewPaneRoot
                 viewPaneRoot.getChildren().clear();
 
+                ShapeImporter shapeImporter = new ShapeImporter();
                 // import the shapes from the XML file
-                importShapesFromXML(doc, viewPaneRoot, nodeController); // Call your export function
+                Node topEvent = shapeImporter.importShapesFromXML(doc, viewPaneRoot, nodeController); // Call your export function
+
+                // set the top event in the viewPaneController
+                if (viewPaneController != null && topEvent != null) {
+                    viewPaneController.setTopEvent(topEvent);
+                }
             } catch (SAXException | ParserConfigurationException | IOException e) {
                 throw new RuntimeException(e);
             }
 
 
         }
+    }
+
+    public void setVPC(ViewPaneController viewPaneController) {
+        this.viewPaneController = viewPaneController;
     }
 }

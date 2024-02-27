@@ -18,12 +18,16 @@ public class BTApp extends Application {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(BTApp.class.getResource("main.fxml"));
-        scene = new Scene(fxmlLoader.load(), 1200, 720);
+        scene = new Scene(fxmlLoader.load(), 3000, 3000);
 
 
         BTController controller = fxmlLoader.getController();
         controller.initController(scene, stage);
 
+
+        // set actual size as max
+        stage.setMaxHeight(3000);
+        stage.setMaxWidth(3000);
 
         stage.setTitle("BowTie");
         stage.setScene(scene);

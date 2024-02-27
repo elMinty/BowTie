@@ -95,20 +95,12 @@ public class NodeContextMenu {
         MenuItem editDescription = new MenuItem("Edit Description");
         MenuItem editScore = new MenuItem("Edit Score");
 
-        MenuItem viewName = new MenuItem("View Name");
-        MenuItem viewDescription = new MenuItem("View Description");
-        MenuItem viewScore = new MenuItem("View Score");
+        Menu viewName = initViewName();
+        Menu viewDescription = initViewDescription();
+        Menu viewScore = initViewScore();
 
 
-        // handlers using handleEdit(shape, detail) and handleView(shape, detail)
 
-        editName.setOnAction(e -> nc.handleEdit(shape, NodeDetail.NAME));
-        editDescription.setOnAction(e -> nc.handleEdit(shape, NodeDetail.DESCRIPTION));
-        editScore.setOnAction(e -> nc.handleEdit(shape, NodeDetail.SCORE));
-
-        viewName.setOnAction(e -> nc.handleView(shape, NodeDetail.NAME));
-        viewDescription.setOnAction(e -> nc.handleView(shape, NodeDetail.DESCRIPTION));
-        viewScore.setOnAction(e -> nc.handleView(shape, NodeDetail.SCORE));
 
         editDetails.getItems().addAll(editName, editDescription, editScore);
 
@@ -119,7 +111,58 @@ public class NodeContextMenu {
         contextMenu.getItems().add(detailsMenu);
 
 
+    }
 
+    private Menu initViewName(){
+        Menu viewName = new Menu("View Name");
+
+        MenuItem NAlways = new MenuItem("Always");
+        MenuItem NOnHover = new MenuItem("On Hover");
+        MenuItem NHidden = new MenuItem("Hidden");
+
+        viewName.getItems().addAll(NAlways, NOnHover, NHidden);
+
+        NAlways.setOnAction(e -> nc.handleView(shape, NodeDetail.NAME, ViewOption.ALWAYS));
+        NOnHover.setOnAction(e -> nc.handleView(shape, NodeDetail.NAME, ViewOption.ON_HOVER));
+        NHidden.setOnAction(e -> nc.handleView(shape, NodeDetail.NAME, ViewOption.NEVER));
+
+        return viewName;
+
+    }
+
+    private Menu initViewDescription(){
+
+        Menu viewDescription = new Menu("View Description");
+
+        MenuItem DAlways = new MenuItem("Always");
+        MenuItem DOnHover = new MenuItem("On Hover");
+        MenuItem DHidden = new MenuItem("Hidden");
+
+        viewDescription.getItems().addAll(DAlways, DOnHover, DHidden);
+
+        DAlways.setOnAction(e -> nc.handleView(shape, NodeDetail.DESCRIPTION, ViewOption.ALWAYS));
+        DOnHover.setOnAction(e -> nc.handleView(shape, NodeDetail.DESCRIPTION, ViewOption.ON_HOVER));
+        DHidden.setOnAction(e -> nc.handleView(shape, NodeDetail.DESCRIPTION, ViewOption.NEVER));
+
+        return viewDescription;
+
+    }
+
+    private Menu initViewScore(){
+
+        Menu viewScore = new Menu("View Score");
+
+        MenuItem SAlways = new MenuItem("Always");
+        MenuItem SOnHover = new MenuItem("On Hover");
+        MenuItem SHidden = new MenuItem("Hidden");
+
+        viewScore.getItems().addAll(SAlways, SOnHover, SHidden);
+
+        SAlways.setOnAction(e -> nc.handleView(shape, NodeDetail.SCORE, ViewOption.ALWAYS));
+        SOnHover.setOnAction(e -> nc.handleView(shape, NodeDetail.SCORE, ViewOption.ON_HOVER));
+        SHidden.setOnAction(e -> nc.handleView(shape, NodeDetail.SCORE, ViewOption.NEVER));
+
+        return viewScore;
 
     }
 

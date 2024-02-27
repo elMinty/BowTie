@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <shapes>
-    <shape id="0" scaleX="4.0" scaleY="4.0" type="TOP_EVENT" x="1290.0" y="67.0">
-        <node description="" id="0" name="TOP_EVENT0" score="" type="TOP_EVENT"/>
+    <shape id="0" scaleX="1.0" scaleY="1.0" type="TOP_EVENT" x="889.5" y="415.5">
+        <node description="" id="0" name="TOP_EVENT0" score="" type="TOP_EVENT">
+            <beforeNodes keys="1,2" size="2"/>
+            <afterNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1" scaleX="1.0" scaleY="1.0" type="ACTION" x="327.0" y="300.0">
+        <node description="" id="1" name="ACTION1" score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="0" size="1"/>
+        </node>
+    </shape>
+    <shape id="2" scaleX="1.0" scaleY="1.0" type="ACTION" x="252.0" y="627.0">
+        <node description="" id="2" name="ACTION2" score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="0" size="1"/>
+        </node>
     </shape>
 </shapes>

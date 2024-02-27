@@ -38,10 +38,12 @@ public class Connector {
     public void flush(Shape targetShape) {
         this.targetShape = targetShape;
         try{
+
             if (isViableConnection(targetNodeId, sourceNodeId) && connectMode) {
                 connect(connectType);
             }
             else {
+
                 connectAlert(ConnectionMode.NONE);
             }
         } catch (NullPointerException e) {
@@ -62,10 +64,9 @@ public class Connector {
                 else {
 
                 Node sourceNode = nodeMap.get(sourceNodeId);
-                sourceNode.listAdjoiningNodes();
 
                 Node targetNode = nodeMap.get(targetNodeId);
-                targetNode.listAdjoiningNodes();
+
                 // Instantiate ConnectLine and bind it to the shapes
                 ConnectLine line = new ConnectLine(sourceShape, targetShape, ConnectionMode.BEFORE);
 
@@ -81,7 +82,6 @@ public class Connector {
                 else {
 
                 Node sourceNode = nodeMap.get(sourceNodeId);
-                sourceNode.listAdjoiningNodes();
                 // Instantiate ConnectLine and bind it to the shapes
                 ConnectLine line = new ConnectLine(sourceShape, targetShape, ConnectionMode.AFTER);
                 //Store the connection
@@ -91,6 +91,7 @@ public class Connector {
                 }
                 break;
             case NONE:
+                System.out.println("Invalid connection");
                 connectAlert(ConnectionMode.NONE);
                 break;
             case DISCONNECT:
@@ -212,14 +213,33 @@ public class Connector {
         alert.showAndWait();
     }
 
-    public void setSourceShape(Shape shape) {
-        this.sourceShape = shape;
-    }
-
     private String generateConnectionHash(String sourceId, String targetId) {
         // Ensure the order of IDs does not affect the hash
         return Stream.of(sourceId, targetId)
                 .sorted()
                 .collect(Collectors.joining("-"));
+    }
+
+    public void setSourceShape(Shape sourceShape) {
+        this.sourceShape = sourceShape;
+    }
+
+
+    // connection loader
+    public void load_connection(String sourceId, String targetId, Shape sourceShape, Shape targetShape) {
+
+        connectMode = true;
+
+        this.sourceNodeId = sourceId;
+        this.targetNodeId = targetId;
+
+        this.sourceShape = sourceShape;
+        this.targetShape = targetShape;
+
+
+        this.connectType = ConnectionMode.BEFORE;
+        flush(getTargetShape());
+
+        connectMode = false;
     }
 }

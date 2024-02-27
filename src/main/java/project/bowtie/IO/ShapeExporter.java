@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShapeExporter {
 
@@ -38,6 +39,10 @@ public class ShapeExporter {
 
             // Step 2 & 3: Convert shapes to XML elements
             for (Shape shape : shapes) {
+                if (shape.getUserData() == null) {
+                    System.out.println("Shape has no user data");
+                    continue;
+                }
 
                 Element shapeElement = setElements(doc,shape);
                 // Add more properties as needed
@@ -61,6 +66,9 @@ public class ShapeExporter {
     }
 
     private static Element setElements(Document doc,Shape shape) {
+        // print shape ID and type
+
+        System.out.println("Setting elements");
         // Node elements for the shape
         Node node = (Node) shape.getUserData();
 
@@ -94,6 +102,42 @@ public class ShapeExporter {
         nodeElement.setAttribute("description", node.getDescription());
         nodeElement.setAttribute("score", node.getScore());
 
+
+        Element beforeNodes = doc.createElement("beforeNodes");
+        Element afterNodes = doc.createElement("afterNodes");
+
+        // append before nodes
+        // go through before nodes keys
+        beforeNodes.setAttribute("size", String.valueOf(node.getBeforeNodes().size()));
+        afterNodes.setAttribute("size", String.valueOf(node.getAfterNodes().size()));
+
+        String beforeKeys = getKeys(node.getBeforeNodes());
+        String afterKeys = getKeys(node.getAfterNodes());
+
+        beforeNodes.setAttribute("keys", beforeKeys);
+        afterNodes.setAttribute("keys", afterKeys);
+
+        nodeElement.appendChild(beforeNodes);
+        nodeElement.appendChild(afterNodes);
+
         return nodeElement;
+    }
+
+    private static String getKeys(Map<String, Node> map) {
+        String keys = "";
+        if (map.isEmpty()) {
+            return keys;
+        }
+        int index = 0;
+        for (String key : map.keySet()) {
+
+            keys += key;
+            //if not last key, add comma
+            if (index < map.size() - 1) {
+                keys += ",";
+            }
+            index++;
+        }
+        return keys;
     }
 }

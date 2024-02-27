@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.DragController;
 import project.bowtie.App.Controllers.ViewPane.Menus.NodeContextMenu;
+import project.bowtie.App.Controllers.ViewPane.Menus.ViewOption;
 import project.bowtie.App.Controllers.ViewPane.Obj.Lines.Connector;
 import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeFactory;
 import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeLabel;
@@ -232,16 +233,25 @@ public class NodeController {
 
     }
 
-    public void handleView(Shape shape, NodeDetail detail) {
+    public void handleView(Shape shape, NodeDetail detail, ViewOption viewOption) {
+
+        System.out.println("View Option: " + viewOption + " for " + detail + " on " + shape.getId() + " NodeDetail: " + detail);
 
 
         switch (detail) {
             case NAME:
+                NodeLabel nameLabel = ((Node) shape.getUserData()).getNameLabel();
+                System.out.println("Name Label: " + nameLabel.getText());
+                nameLabel.toggleLabelVisibility(viewOption);
                 break;
             case DESCRIPTION:
+                NodeLabel descriptionLabel = ((Node) shape.getUserData()).getDescriptionLabel();
+                descriptionLabel.toggleLabelVisibility(viewOption);
 
                 break;
             case SCORE:
+                NodeLabel scoreLabel = ((Node) shape.getUserData()).getScoreLabel();
+                scoreLabel.toggleLabelVisibility(viewOption);
 
                 break;
             default:

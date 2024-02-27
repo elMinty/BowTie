@@ -4,17 +4,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Shape;
+import project.bowtie.App.Controllers.ViewPane.Menus.ViewOption;
 import project.bowtie.Model.BTmodel.Nodes.NodeDetail;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 import project.bowtie.App.Controllers.ViewPane.Obj.Text.Dialogs;
 
 
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class NodeLabel extends Label{
 
@@ -24,6 +23,8 @@ public class NodeLabel extends Label{
 
     int offsetY = 0;
     int offsetX = 0;
+    private ViewOption viewOption;
+    private boolean drag = false;
 
 
     public NodeLabel(String text, Shape shape, NodeDetail nodeDetail, NodeType type) {
@@ -32,19 +33,83 @@ public class NodeLabel extends Label{
         this.shape = shape;
         this.type = type;
         if (nodeDetail == NodeDetail.NAME) {
-            initNameLabelHandlers();
+            // if nodeDetail is name handle name init
+
+            if (!drag){
+                initNameLabelHandlers();
+                this.viewOption = ViewOption.ALWAYS;
+
+            }
+
         }
         if (nodeDetail == NodeDetail.DESCRIPTION) {
-            initDescriptionLabelHandlers();
+
+            if (!drag){
+                initDescriptionLabelHandlers();
+                this.viewOption = ViewOption.ON_HOVER;
+            }
         }
         if (nodeDetail == NodeDetail.SCORE) {
-            initScoreLabelHandlers();
+
+            if (!drag){
+                initScoreLabelHandlers();
+                this.viewOption = ViewOption.NEVER;
+            }
         }
 
         if (this.type == NodeType.AND) {
             this.setVisible(false);
         }
 
+    }
+
+    private void setOnHover(){
+
+        this.setVisible(false); // Initially invisible
+
+        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            this.setVisible(false);
+        });
+
+        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            this.setVisible(true);
+
+        });
+
+    }
+
+    private void removeOnHover() {
+        this.setVisible(true); // Initially visible
+        shape.removeEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            this.setVisible(false);
+        });
+
+        shape.removeEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            this.setVisible(true);
+        });
+    }
+
+    public void toggleLabelVisibility(ViewOption viewOption) {
+
+        removeOnHover();
+        System.out.println(viewOption);
+        switch(viewOption) {
+            case ALWAYS -> {
+
+                this.setVisible(true);
+                this.viewOption = ViewOption.ALWAYS;
+            }
+            case ON_HOVER -> {
+
+                this.setOnHover();
+                this.viewOption = ViewOption.ON_HOVER;
+            }
+            case NEVER -> {
+
+                this.setVisible(false);
+                this.viewOption = ViewOption.NEVER;
+            }
+        }
     }
 
     private void initScoreLabelHandlers() {
@@ -57,16 +122,7 @@ public class NodeLabel extends Label{
 
         this.setLayoutX(shape.getLayoutX() + offsetX);
 
-        this.setVisible(true); // Initially invisible
-
-        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-            this.setVisible(false);
-        });
-
-        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            this.setVisible(true);
-
-        });
+        this.setOnHover();
 
         setHandlers();
     }
@@ -92,15 +148,26 @@ public class NodeLabel extends Label{
         shape.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
             // Example of providing visual feedback during dragging
             this.setVisible(false);
+            drag = true;
 
         });
 
         shape.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             // Reset visual feedback when dragging stops
             // Update the label position with calculated offsets
+
             this.setLayoutX(shape.getLayoutX() + offsetX);
             this.setLayoutY(shape.getLayoutY() + offsetY);
-            this.setVisible(true);
+            if (this.viewOption == ViewOption.ON_HOVER) {
+                this.setOnHover();
+            }
+            if (this.viewOption == ViewOption.ALWAYS) {
+                this.setVisible(true);
+            }
+            if (this.viewOption == ViewOption.NEVER) {
+                this.setVisible(false);
+            }
+            drag = false;
         });
     }
 
@@ -114,16 +181,7 @@ public class NodeLabel extends Label{
 
         this.setLayoutX(shape.getLayoutX() + offsetX);
 
-        this.setVisible(true); // Initially invisible
-
-        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-            this.setVisible(false);
-        });
-
-        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            this.setVisible(true);
-
-        });
+        this.setOnHover();
 
         setHandlers();
 
@@ -293,6 +351,10 @@ public class NodeLabel extends Label{
         });
 
         return scores; // This will return either the selected scores or the default "None" scores
+    }
+
+    public void toggleLabelVisibility() {
+        this.setVisible(!this.isVisible());
     }
 
 }
