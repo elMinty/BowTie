@@ -187,4 +187,27 @@ public class NodeUtils {
         return beforeAfter && afterBefore;
     }
 
+    public static NodeType getNodeType(String type) {
+        switch (type) {
+            case "THREAT":
+                return NodeType.THREAT;
+            case "AND":
+                return NodeType.AND;
+            case "ACTION":
+                return NodeType.ACTION;
+            case "VULNERABILITY":
+                return NodeType.VULNERABILITY;
+            case "MITIGATION":
+                return NodeType.MITIGATION;
+            case "COUNTER_MITIGATION":
+                return NodeType.COUNTER_MITIGATION;
+            case "EXPOSURE":
+                return NodeType.EXPOSURE;
+            case "TOP_EVENT":
+                return NodeType.TOP_EVENT;
+            default:
+                return NodeType.NONE;
+        }
+    }
+
 }

@@ -1,20 +1,21 @@
 package project.bowtie.App.Controllers.ViewPane;
 
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.DragController;
 import project.bowtie.App.Controllers.ViewPane.Menus.NodeContextMenu;
-import project.bowtie.App.Controllers.ViewPane.Obj.Connector;
-import project.bowtie.App.Controllers.ViewPane.Obj.NodeFactory;
+import project.bowtie.App.Controllers.ViewPane.Obj.Lines.Connector;
+import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeFactory;
+import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeLabel;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 import project.bowtie.Model.BTmodel.Nodes.NodeUtils;
-import project.bowtie.App.Controllers.ViewPane.Obj.Node_Detail;
+import project.bowtie.Model.BTmodel.Nodes.NodeDetail;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -67,9 +68,11 @@ public class NodeController {
                         connector.disconnect(node.getId(), afterNode.getId());
                     }
                 }
+                NodeLabel nameLabel = node.getNameLabel();
+                NodeLabel descriptionLabel = node.getDescriptionLabel();
                 nodeMap.remove(node.getId());
                 NodeUtils.delete(node);
-                root.getChildren().remove(shape);
+                root.getChildren().removeAll(shape, nameLabel, descriptionLabel);
             }
         }
     }
@@ -94,7 +97,7 @@ public class NodeController {
 
 
 
-    public void handleAddNode(NodeType type, double x, double y) {
+    public Shape handleAddNode(NodeType type, double x, double y) {
 
         Shape shape = NodeFactory.createNode(type);
 
@@ -113,19 +116,27 @@ public class NodeController {
 
         // link pane and node
         shape.setId(node.getId());
-        shape.setUserData(node);
+
         nodeMap.put(node.getId(), node);
 
-        Label nameLabel = setLabelName(shape, node.getName());
-        Label infoLabel = setInfoLabel(shape, node.getDescription());
+        //init labels
 
-        shape.setAccessibleText(node.getName());
-        shape.setAccessibleRoleDescription(node.getDescription());
+        NodeLabel nameLabel = new NodeLabel(type.toString() + nodeCount, shape, NodeDetail.NAME, type);
+        NodeLabel infoLabel = new NodeLabel("", shape, NodeDetail.DESCRIPTION, type);
+        NodeLabel scoreLabel = new NodeLabel("", shape, NodeDetail.SCORE, type);
+
+        node.setNameLabel(nameLabel);
+        node.setDescriptionLabel(infoLabel);
+        node.setScoreLabel(scoreLabel);
+
+        shape.setUserData(node);
         // update node count
         nodeCount++;
 
         // Add the shape to the root
-        root.getChildren().addAll(shape, infoLabel, nameLabel);
+        root.getChildren().addAll(shape, infoLabel, nameLabel, scoreLabel);
+
+        return shape;
 
     }
 
@@ -145,78 +156,83 @@ public class NodeController {
         });
     }
 
-    private Label setInfoLabel(Shape shape, String label) {
-        Label infoLabel = new Label();
-        // Setup the information label (but don't add it to the scene yet)
-        infoLabel.setText(label);
-        infoLabel.setVisible(false); // Initially invisible
-
-        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-            // Position the label based on the shape's position
-            infoLabel.setLayoutX(shape.getLayoutX() + 30); // Offset by 10px for example
-            infoLabel.setLayoutY(shape.getLayoutY() + 30);
-            infoLabel.setVisible(true);
-
-
-            // Add the label to the scene or a parent container if not already done
-        });
-
-        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
-            infoLabel.setVisible(false);
-        });
-
-        // Handler for dragging the node
-        shape.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            // Update the label position as the node is dragged
-            // You might need to adjust the offset to fit your specific needs
-            infoLabel.setLayoutX(shape.getLayoutX() + 30); // Offset to position the label correctly
-            infoLabel.setLayoutY(shape.getLayoutY() + 30);
-        });
-
-
-        return infoLabel;
-
-    }
-
-    public Label setLabelName(Shape shape, String name) {
-
-        // Sets the nodes name - displays the name as text based on the shape's position
-        // create label that displays the name of the node on the shape position
-
-        Node node = (Node) shape.getUserData();
-        node.setName(name);
-
-        Label nameLabel = new Label();
-        // Setup the information label (but don't add it to the scene yet)
-        nameLabel.setText(name);
-
-        return nameLabel;
-
-    }
-
-    public void handleEdit(Shape shape, Node_Detail detail) {
+    public void handleEdit(Shape shape, NodeDetail detail) {
 
         // gets a window popup for entering a string to edit the node's name, description, or quantifier
+        double offsetX = shape.getLayoutX();
+        double offsetY = shape.getLayoutY();
 
+        // Create a TextField for user input
+        TextField textField = new TextField();
+        textField.setPromptText("Enter your text here");
+        textField.setLayoutX(100 + offsetX); // Set X position
+        textField.setLayoutY(100 + offsetY); // Set Y position
+
+        // Create a Button to submit the input
+        Button submitButton = new Button("Submit");
+        submitButton.setLayoutX(250 + offsetX); // Set X position
+        submitButton.setLayoutY(100 + offsetY); // Set Y position
+
+        Node node = (Node) shape.getUserData();
 
         switch (detail) {
             case NAME:
-                getUserText();
-                setLabelName(shape, userInput);
-                resetUserInput();
-                break;
-            case DESCRIPTION:
+                // Add an event handler to the button
+                submitButton.setOnAction(event -> {
+                    // Get the text from the TextField
+                    this.userInput = textField.getText();
+                    System.out.println("User input: " + userInput);
+
+                    // Set the node's name to the user input
+                    node.setName(userInput);
+                    // Set the label's text to the user input
+                    node.getNameLabel().setText(userInput);
+
+                    // Remove the TextField and Button from the scene
+                    root.getChildren().removeAll(textField, submitButton);
+                    resetUserInput();
+                });
+
+                // Add the TextField and Button to the Pane
+                root.getChildren().addAll(textField, submitButton);
 
                 break;
-            case QUANTIFIER:
+            case DESCRIPTION:
+                // Add an event handler to the button
+                submitButton.setOnAction(event -> {
+                    // Get the text from the TextField
+                    this.userInput = textField.getText();
+                    System.out.println("User input: " + userInput);
+
+                    // Set the node's description to the user input
+                    node.setDescription(userInput);
+                    // Set the label's text to the user input
+                    node.getDescriptionLabel().setText(userInput);
+
+                    // Remove the TextField and Button from the scene
+                    root.getChildren().removeAll(textField, submitButton);
+                    resetUserInput();
+                });
+
+                // Add the TextField and Button to the Pane
+                root.getChildren().addAll(textField, submitButton);
+
+                break;
+            case SCORE:
+
+                // score handling
+                handleScoring(shape);
 
                 break;
             default:
                 break;
         }
+
+
+
     }
 
-    public void handleView(Shape shape, Node_Detail detail) {
+    public void handleView(Shape shape, NodeDetail detail) {
 
 
         switch (detail) {
@@ -225,7 +241,7 @@ public class NodeController {
             case DESCRIPTION:
 
                 break;
-            case QUANTIFIER:
+            case SCORE:
 
                 break;
             default:
@@ -246,31 +262,112 @@ public class NodeController {
         userInput = "";
     }
 
-    public void getUserText() {
+    private void handleScoring(Shape shape) {
+        Node node = (Node) shape.getUserData();
+
+        NodeType type = node.getType();
+
+        switch (type) {
+            //Threat or Top Event
+            case TOP_EVENT , THREAT:
+                List<String> scores = NodeLabel.scoreThreatLabel();
+                String confidentiality = "Confidentiality: " + scores.get(0); String integrity = "Integrity: " + scores.get(1); String availability = "Availability: " + scores.get(2);
+
+                String score = confidentiality + "\n" + integrity + "\n" + availability;
+
+                node.setScore(score);
+                node.getScoreLabel().setText(score);
+
+                System.out.println("Score Label: " + node.getScoreLabel().getText());
+
+                break;
+            case MITIGATION, COUNTER_MITIGATION, ACTION:
+                List<String> scoresMit = NodeLabel.scoreMitigatorsLabel();
+                String effectiveness = "Effectiveness: " + scoresMit.get(0); String efficiency = "Difficulty: " + scoresMit.get(1);
+
+                String scoreMit = effectiveness + "\n" + efficiency;
+
+                node.setScore(scoreMit);
+                node.getScoreLabel().setText(scoreMit);
+
+                System.out.println("Score Label: " + node.getScoreLabel().getText());
 
 
-        // Create a TextField for user input
-        TextField textField = new TextField();
-        textField.setPromptText("Enter your text here");
-        textField.setLayoutX(100); // Set X position
-        textField.setLayoutY(100); // Set Y position
+                break;
+            case EXPOSURE:
+                List<String> scoresExp = NodeLabel.scoreExpLabel();
 
-        // Create a Button to submit the input
-        Button submitButton = new Button("Submit");
-        submitButton.setLayoutX(250); // Set X position
-        submitButton.setLayoutY(100); // Set Y position
+                //get strings for: Financial, Operational, Legal, Strategic, Environmental, Health & Safety, Reputation
 
-        // Add an event handler to the button
-        submitButton.setOnAction(event -> {
-            // Get the text from the TextField
-            userInput = textField.getText();
+                String financial = "Financial: " + scoresExp.get(0); String operational = "Operational: " + scoresExp.get(1); String legal = "Legal: " + scoresExp.get(2); String strategic = "Strategic: " + scoresExp.get(3); String environmental = "Environmental: " + scoresExp.get(4); String healthSafety = "Health & Safety: " + scoresExp.get(5); String reputation = "Reputation: " + scoresExp.get(6);
 
-            // Remove the TextField and Button from the scene
-            root.getChildren().removeAll(textField, submitButton);
-        });
+                String scoreExp = financial + "\n" + operational + "\n" + legal + "\n" + strategic + "\n" + environmental + "\n" + healthSafety + "\n" + reputation;
 
-        // Add the TextField and Button to the Pane
-        root.getChildren().addAll(textField, submitButton);
+                node.setScore(scoreExp);
+                node.getScoreLabel().setText(scoreExp);
+
+                System.out.println("Score Label: " + node.getScoreLabel().getText());
+
+                break;
+            case VULNERABILITY:
+                List<String> scoresVuln = NodeLabel.scoreVulnLabel();
+                String attackVector = "Attack Vector: " + scoresVuln.get(0); String attackComplexity = "Attack Complexity: " + scoresVuln.get(1); String privilegesRequired = "Privileges Required: " + scoresVuln.get(2); String userInteraction = "User Interaction: " + scoresVuln.get(3);
+
+                String scoreVuln = attackVector + "\n" + attackComplexity + "\n" + privilegesRequired + "\n" + userInteraction;
+
+                node.setScore(scoreVuln);
+                node.getScoreLabel().setText(scoreVuln);
+
+                System.out.println("Score Label: " + node.getScoreLabel().getText());
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    public Shape LoadNode(NodeType type, double x, double y, String id, String Name, String Description, String Score, Double scaleX, Double scaleY) {
+
+        Shape shape = NodeFactory.createNode(type);
+
+        // controllers and listeners
+        DragController dragController = new DragController(shape, true);
+        setNodeListeners(shape);
+
+
+        Node node = new Node(id, type, Name);
+
+
+        // Set the shape's position
+        shape.setLayoutX(x);
+        shape.setLayoutY(y);
+
+        // link pane and node
+        shape.setId(node.getId());
+
+        nodeMap.put(node.getId(), node);
+
+        //init labels
+
+        NodeLabel nameLabel = new NodeLabel(Name, shape, NodeDetail.NAME, type);
+        NodeLabel infoLabel = new NodeLabel(Description, shape, NodeDetail.DESCRIPTION, type);
+        NodeLabel scoreLabel = new NodeLabel(Score, shape, NodeDetail.SCORE, type);
+
+        node.setNameLabel(nameLabel);
+        node.setDescriptionLabel(infoLabel);
+        node.setScoreLabel(scoreLabel);
+
+        shape.setUserData(node);
+        // update node count
+        nodeCount++;
+
+        shape.setScaleX(scaleX);
+        shape.setScaleY(scaleY);
+
+        // Add the shape to the root
+        root.getChildren().addAll(shape, infoLabel, nameLabel, scoreLabel);
+
+        return shape;
 
     }
 

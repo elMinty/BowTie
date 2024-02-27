@@ -21,7 +21,7 @@ public class ViewPaneController{
 
     private final ViewPaneContextMenu contextMenuBuilder = new ViewPaneContextMenu(); //establish the context menu
     private ContextMenu contextMenu;
-    public NodeController sc;
+    public NodeController nc;
 
     private Node topEvent;
     private Bowtie bowtie;
@@ -35,7 +35,7 @@ public class ViewPaneController{
     public void initViewPane(Scene scene, Stage stage){
         this.scene = scene;
         this.stage = stage;
-        sc = new NodeController(root);;
+        nc = new NodeController(root);;
         setContextMenu();
         setTopEvent();
 
@@ -45,7 +45,7 @@ public class ViewPaneController{
     private void setContextMenu() {
 
         // Initialize the context menu
-        contextMenu = contextMenuBuilder.initContextMenu(sc);
+        contextMenu = contextMenuBuilder.initContextMenu(nc);
 
         // Set event handler for context menu request
         root.setOnContextMenuRequested(event -> {
@@ -65,8 +65,8 @@ public class ViewPaneController{
     //set up the top event
     private void setTopEvent() {
 
-        sc.handleAddNode(NodeType.TOP_EVENT, 900, 360);
-        Node topEvent = sc.getNode("0");
+        nc.handleAddNode(NodeType.TOP_EVENT, 900, 360);
+        Node topEvent = nc.getNode("0");
         bowtie = new Bowtie(topEvent);
     }
 

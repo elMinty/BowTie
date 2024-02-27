@@ -1,10 +1,10 @@
-package project.bowtie.App.Controllers.ViewPane.Obj;
+package project.bowtie.App.Controllers.ViewPane.Obj.Lines;
 
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode;
+import project.bowtie.App.Controllers.ViewPane.Obj.Lines.ConnectLine;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.NodeUtils;
 

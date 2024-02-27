@@ -25,6 +25,11 @@ public class BTController{
         if (viewPaneController != null) {
             viewPaneController.initViewPane(scene, stage);
         }
+        if (menuBarController != null) {
+            menuBarController.initMenuBar(scene, stage);
+            menuBarController.setViewPaneRoot(viewPaneController.root);
+            menuBarController.setNodeController(viewPaneController.nc);
+        }
     }
 
     public void setScene(Scene scene) {

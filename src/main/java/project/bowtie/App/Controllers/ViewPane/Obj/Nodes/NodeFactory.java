@@ -1,4 +1,4 @@
-package project.bowtie.App.Controllers.ViewPane.Obj;
+package project.bowtie.App.Controllers.ViewPane.Obj.Nodes;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

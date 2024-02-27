@@ -1,4 +1,4 @@
-package project.bowtie.App.Controllers.ViewPane.Obj;
+package project.bowtie.App.Controllers.ViewPane.Obj.Lines;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Bounds;

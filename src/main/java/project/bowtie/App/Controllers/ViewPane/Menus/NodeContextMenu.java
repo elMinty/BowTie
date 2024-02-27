@@ -5,7 +5,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.shape.Shape;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
-import project.bowtie.App.Controllers.ViewPane.Obj.Node_Detail;
+import project.bowtie.Model.BTmodel.Nodes.NodeDetail;
 
 public class NodeContextMenu {
 
@@ -93,26 +93,26 @@ public class NodeContextMenu {
         // Menu items for edit and view
         MenuItem editName = new MenuItem("Edit Name");
         MenuItem editDescription = new MenuItem("Edit Description");
-        MenuItem editQuantifier = new MenuItem("Edit Type");
+        MenuItem editScore = new MenuItem("Edit Score");
 
         MenuItem viewName = new MenuItem("View Name");
         MenuItem viewDescription = new MenuItem("View Description");
-        MenuItem viewType = new MenuItem("View Type");
+        MenuItem viewScore = new MenuItem("View Score");
 
 
         // handlers using handleEdit(shape, detail) and handleView(shape, detail)
 
-        editName.setOnAction(e -> nc.handleEdit(shape, Node_Detail.NAME));
-        editDescription.setOnAction(e -> nc.handleEdit(shape, Node_Detail.DESCRIPTION));
-        editQuantifier.setOnAction(e -> nc.handleEdit(shape, Node_Detail.QUANTIFIER));
+        editName.setOnAction(e -> nc.handleEdit(shape, NodeDetail.NAME));
+        editDescription.setOnAction(e -> nc.handleEdit(shape, NodeDetail.DESCRIPTION));
+        editScore.setOnAction(e -> nc.handleEdit(shape, NodeDetail.SCORE));
 
-        viewName.setOnAction(e -> nc.handleView(shape, Node_Detail.NAME));
-        viewDescription.setOnAction(e -> nc.handleView(shape, Node_Detail.DESCRIPTION));
-        viewType.setOnAction(e -> nc.handleView(shape, Node_Detail.QUANTIFIER));
+        viewName.setOnAction(e -> nc.handleView(shape, NodeDetail.NAME));
+        viewDescription.setOnAction(e -> nc.handleView(shape, NodeDetail.DESCRIPTION));
+        viewScore.setOnAction(e -> nc.handleView(shape, NodeDetail.SCORE));
 
-        editDetails.getItems().addAll(editName, editDescription, editQuantifier);
+        editDetails.getItems().addAll(editName, editDescription, editScore);
 
-        viewDetails.getItems().addAll(viewName, viewDescription, viewType);
+        viewDetails.getItems().addAll(viewName, viewDescription, viewScore);
 
         detailsMenu.getItems().addAll(editDetails, viewDetails);
 

@@ -1,5 +1,8 @@
 package project.bowtie.Model.BTmodel.Nodes;
 
+
+import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeLabel;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +14,10 @@ public class Node {
     private Map<String, Node> afterNodes;  // Maps IDs to NodeFactory that this node leads to
     private Map<String, Node> mitigationNodes; // NodeFactory that mitigate this node
     private String description;
-    private String quantifier;
+    private String score;
+    private NodeLabel nameLabel;
+    private NodeLabel descriptionLabel;
+    private NodeLabel scoreLabel;
 
     public Node(String ID, NodeType type, String name) {
         this.type = type;
@@ -21,7 +27,10 @@ public class Node {
         this.afterNodes = new HashMap<>();
         this.mitigationNodes = new HashMap<>();
         this.description = "";
-        this.quantifier = null;
+        this.score = "";
+        this.nameLabel = null;
+        this.descriptionLabel = null;
+        this.scoreLabel = null;
 
     }
 
@@ -80,8 +89,20 @@ public class Node {
         return description;
     }
 
-    public String getQuantifier() {
-        return quantifier;
+    public String getScore() {
+        return score;
+    }
+
+    public NodeLabel getScoreLabel() {
+        return scoreLabel;
+    }
+
+    public NodeLabel getNameLabel() {
+        return nameLabel;
+    }
+
+    public NodeLabel getDescriptionLabel() {
+        return descriptionLabel;
     }
 
     // setters
@@ -102,9 +123,23 @@ public class Node {
         this.description = description;
     }
 
-    public void setQuantifier(String quantifier) {
-        this.quantifier = quantifier;
+    public void setScore(String score) {
+        this.score = score;
     }
+
+    public void setScoreLabel(NodeLabel scoreLabel) {
+        this.scoreLabel = scoreLabel;
+    }
+
+    public void setNameLabel(NodeLabel nameLabel) {
+        this.nameLabel = nameLabel;
+    }
+
+    public void setDescriptionLabel(NodeLabel descriptionLabel) {
+        this.descriptionLabel = descriptionLabel;
+    }
+
+
 
     // Logic for adding and removing nodes
 

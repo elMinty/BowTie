@@ -1,4 +1,4 @@
-package project.bowtie.App.Controllers.ViewPane.Obj;
+package project.bowtie.App.Controllers.ViewPane.Obj.Text;
 
 import javafx.scene.Cursor;
 import javafx.scene.Group;
