@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.IO.ShapeExporter;
 import project.bowtie.IO.ShapeImporter;
+import project.bowtie.Model.BTmodel.Bowtie.AttackTree;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 
 import javax.imageio.ImageIO;
@@ -136,10 +137,13 @@ public class MenuBarController{
                 ShapeImporter shapeImporter = new ShapeImporter();
                 // import the shapes from the XML file
                 Node topEvent = shapeImporter.importShapesFromXML(doc, viewPaneRoot, nodeController); // Call your export function
+                System.out.println("Top event: " + topEvent.getName());
 
                 // set the top event in the viewPaneController
                 if (viewPaneController != null && topEvent != null) {
                     viewPaneController.setTopEvent(topEvent);
+                    //print top event id
+                    System.out.println("Top event ID: " + topEvent.getId());
                 }
             } catch (SAXException | ParserConfigurationException | IOException e) {
                 throw new RuntimeException(e);
@@ -151,5 +155,11 @@ public class MenuBarController{
 
     public void setVPC(ViewPaneController viewPaneController) {
         this.viewPaneController = viewPaneController;
+    }
+
+    public void handlePath(ActionEvent actionEvent) {
+        // print TopEvent ID
+        this.viewPaneController.bowtie.attackTree.getPaths();
+
     }
 }

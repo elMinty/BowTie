@@ -11,6 +11,10 @@ public class ConsequenceTree extends Tree {
 
     }
 
+    public void setTopEvent(Node topEvent) {
+        this.TopEvent = topEvent;
+    }
+
     public static ConsequenceTree getInstance(Node rootNode) {
         if (instance == null) {
             instance = new ConsequenceTree(rootNode);

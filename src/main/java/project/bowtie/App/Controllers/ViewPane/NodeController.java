@@ -212,7 +212,7 @@ public class NodeController {
                 submitButton.setOnAction(event -> {
                     // Get the text from the TextField
                     this.userInput = textField.getText();
-                    System.out.println("User input: " + userInput);
+
 
                     // Set the node's name to the user input
                     node.setName(userInput);
@@ -233,7 +233,6 @@ public class NodeController {
                 submitButton.setOnAction(event -> {
                     // Get the text from the TextField
                     this.userInput = textField.getText();
-                    System.out.println("User input: " + userInput);
 
                     // Set the node's description to the user input
                     node.setDescription(userInput);
@@ -265,13 +264,10 @@ public class NodeController {
 
     public void handleView(Shape shape, NodeDetail detail, ViewOption viewOption) {
 
-        System.out.println("View Option: " + viewOption + " for " + detail + " on " + shape.getId() + " NodeDetail: " + detail);
-
 
         switch (detail) {
             case NAME:
                 NodeLabel nameLabel = ((Node) shape.getUserData()).getNameLabel();
-                System.out.println("Name Label: " + nameLabel.getText());
                 nameLabel.toggleLabelVisibility(viewOption);
                 break;
             case DESCRIPTION:
@@ -318,19 +314,19 @@ public class NodeController {
                 node.setScore(score);
                 node.getScoreLabel().setText(score);
 
-                System.out.println("Score Label: " + node.getScoreLabel().getText());
+
 
                 break;
             case MITIGATION, COUNTER_MITIGATION, ACTION:
                 List<String> scoresMit = NodeLabel.scoreMitigatorsLabel();
-                String effectiveness = "Effectiveness: " + scoresMit.get(0); String efficiency = "Difficulty: " + scoresMit.get(1);
+                String effectiveness = "Effectiveness: " + scoresMit.get(0); String efficiency = "Difficulty: " + scoresMit.get(1); String coverage =  "Coverage: " + scoresMit.get(2); String opportunity =  "Opportunity: " + scoresMit.get(3);
 
-                String scoreMit = effectiveness + "\n" + efficiency;
+                String scoreMit = effectiveness + "\n" + efficiency + "\n" + coverage + "\n" + opportunity;
 
                 node.setScore(scoreMit);
                 node.getScoreLabel().setText(scoreMit);
 
-                System.out.println("Score Label: " + node.getScoreLabel().getText());
+
 
 
                 break;
@@ -346,7 +342,6 @@ public class NodeController {
                 node.setScore(scoreExp);
                 node.getScoreLabel().setText(scoreExp);
 
-                System.out.println("Score Label: " + node.getScoreLabel().getText());
 
                 break;
             case VULNERABILITY:
@@ -358,7 +353,6 @@ public class NodeController {
                 node.setScore(scoreVuln);
                 node.getScoreLabel().setText(scoreVuln);
 
-                System.out.println("Score Label: " + node.getScoreLabel().getText());
 
                 break;
             default:
@@ -371,7 +365,6 @@ public class NodeController {
         Shape shape = NodeFactory.createNode(type);
 
         // controllers and listeners
-        DragController dragController = new DragController(shape, true);
         setNodeListeners(shape);
 
 

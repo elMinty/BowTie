@@ -21,8 +21,12 @@ public class NodeLabel extends Label{
     private NodeDetail nodeDetail;
     NodeType type;
 
-    int offsetY = 0;
-    int offsetX = 0;
+    int offsetY;
+    int offsetX;
+
+    double dragOffsetY;
+    double dragOffsetX;
+
     private ViewOption viewOption;
     private boolean drag = false;
 
@@ -78,25 +82,52 @@ public class NodeLabel extends Label{
 
     }
 
-    private void removeOnHover() {
+    private void setOn() {
         this.setVisible(true); // Initially visible
-        shape.removeEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            this.setVisible(true);
+        });
+
+        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            this.setVisible(true);
+        });
+    }
+
+    private void setOff() {
+        this.setVisible(false); // Initially invisible
+        shape.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
             this.setVisible(false);
         });
 
-        shape.removeEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+        shape.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             this.setVisible(true);
+        });
+    }
+
+    private void setDrag() {
+
+        // Set mouse pressed event
+        this.setOnMousePressed(event -> {
+            // Calculate the offset from the top-left corner of the rectangle
+            dragOffsetX = event.getSceneX() - this.getLayoutX();
+            dragOffsetY = event.getSceneY() - this.getLayoutY();
+        });
+
+        // Set mouse dragged event
+        this.setOnMouseDragged(event -> {
+            // Update the position of the rectangle
+            this.setLayoutX(event.getSceneX() - dragOffsetX);
+            this.setLayoutY(event.getSceneY() - dragOffsetY);
         });
     }
 
     public void toggleLabelVisibility(ViewOption viewOption) {
 
-        removeOnHover();
         System.out.println(viewOption);
         switch(viewOption) {
             case ALWAYS -> {
 
-                this.setVisible(true);
+                this.setOn();
                 this.viewOption = ViewOption.ALWAYS;
             }
             case ON_HOVER -> {
@@ -106,7 +137,7 @@ public class NodeLabel extends Label{
             }
             case NEVER -> {
 
-                this.setVisible(false);
+                this.setOff();
                 this.viewOption = ViewOption.NEVER;
             }
         }
@@ -123,6 +154,7 @@ public class NodeLabel extends Label{
         this.setLayoutX(shape.getLayoutX() + offsetX);
 
         this.setOnHover();
+        this.setDrag();
 
         setHandlers();
     }
@@ -144,33 +176,6 @@ public class NodeLabel extends Label{
 
     }
 
-    private void setHandlers() {
-        shape.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
-            // Example of providing visual feedback during dragging
-            this.setVisible(false);
-            drag = true;
-
-        });
-
-        shape.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            // Reset visual feedback when dragging stops
-            // Update the label position with calculated offsets
-
-            this.setLayoutX(shape.getLayoutX() + offsetX);
-            this.setLayoutY(shape.getLayoutY() + offsetY);
-            if (this.viewOption == ViewOption.ON_HOVER) {
-                this.setOnHover();
-            }
-            if (this.viewOption == ViewOption.ALWAYS) {
-                this.setVisible(true);
-            }
-            if (this.viewOption == ViewOption.NEVER) {
-                this.setVisible(false);
-            }
-            drag = false;
-        });
-    }
-
     private void initDescriptionLabelHandlers() {
 
         Point2D offsets = calculateDescriptionOffsets(type);
@@ -182,10 +187,37 @@ public class NodeLabel extends Label{
         this.setLayoutX(shape.getLayoutX() + offsetX);
 
         this.setOnHover();
+        this.setDrag();
 
         setHandlers();
 
     }
+
+    private void setHandlers() {
+        shape.addEventHandler(MouseEvent.MOUSE_DRAGGED, event -> {
+            // Example of providing visual feedback during dragging
+            this.setVisible(false);
+
+        });
+
+        shape.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
+
+            this.setLayoutY(shape.getLayoutY() + offsetY);
+            this.setLayoutX(shape.getLayoutX() + offsetX);
+
+            if (this.viewOption == ViewOption.ON_HOVER) {
+                this.setOnHover();
+            }
+            if (this.viewOption == ViewOption.ALWAYS) {
+                setOn();
+            }
+            if (this.viewOption == ViewOption.NEVER) {
+                setOff();
+            }
+        });
+    }
+
+
 
     public void setNodeLabelText(String text) {
         super.setText(text);
@@ -237,8 +269,8 @@ public class NodeLabel extends Label{
                 this.setVisible(false);
             }
             default -> {
-                offsetY = 40;
-                offsetX = 40;
+                offsetY = 135;
+                offsetX = 30;
             }
 
         }
@@ -337,7 +369,7 @@ public class NodeLabel extends Label{
 
     public static List<String> scoreMitigatorsLabel() {
         // Default scores for each category
-        List<String> scores = new ArrayList<>(Arrays.asList("None", "None"));
+        List<String> scores = new ArrayList<>(Arrays.asList("None", "None","None","None"));
 
         javafx.scene.control.Dialog<List<String>> dialog = Dialogs.effectivenessDifficultyDialog();
 

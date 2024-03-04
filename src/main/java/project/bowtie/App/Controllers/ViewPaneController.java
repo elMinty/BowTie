@@ -29,7 +29,7 @@ public class ViewPaneController{
     public NodeController nc;
 
     private Node topEvent;
-    private Bowtie bowtie;
+    public Bowtie bowtie;
 
     private Scene scene;
     private Stage stage;
@@ -60,7 +60,7 @@ public class ViewPaneController{
 
         // Set event handler for context menu request
         root.setOnContextMenuRequested(event -> {
-            contextMenuBuilder.setCoordinates(event.getSceneX(), event.getSceneY());
+            contextMenuBuilder.setCoordinates(event.getX(), event.getY());
             contextMenu.show(root, event.getSceneX(), event.getSceneY());
         });
 
@@ -82,6 +82,8 @@ public class ViewPaneController{
     }
 
     public void setTopEvent(Node topEvent){
+        //print the top event
+        System.out.println("Top Event setting: " + topEvent.getId());
         this.topEvent = topEvent;
         bowtie = new Bowtie(topEvent);
     }

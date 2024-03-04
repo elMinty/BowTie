@@ -41,6 +41,7 @@ public class NodeContextMenu {
     public void showContextMenu(Shape shape, double x, double y) {
         this.shape = shape;
         contextMenu.show(shape, x, y);
+
     }
 
     private Menu initConnectMenu() {
@@ -48,6 +49,7 @@ public class NodeContextMenu {
         Menu connectMenu = new Menu("Connect");
         MenuItem connectBefore = new MenuItem("Connect Before");
         MenuItem connectAfter = new MenuItem("Connect After");
+        MenuItem mitigate = new MenuItem("Mitigate");
         MenuItem disconnect = new MenuItem("Disconnect");
 
 
@@ -69,6 +71,15 @@ public class NodeContextMenu {
             nc.connector.setSourceShape(shape);
         });
 
+        mitigate.setOnAction(e -> {
+            nc.connector.setConnectMode(true);
+            String sourceNodeId = shape.getId(); // currentNode represents the node that opened the context menu
+            // Additional actions to indicate the application is in connection mode, if necessary
+            nc.connector.setConnectType(ConnectionMode.MITIGATE);
+            nc.connector.setSourceNodeId(sourceNodeId);
+            nc.connector.setSourceShape(shape);
+        });
+
         disconnect.setOnAction(e -> {
             nc.connector.setConnectMode(true);
             String sourceNodeId = shape.getId(); // currentNode represents the node that opened the context menu
@@ -78,7 +89,7 @@ public class NodeContextMenu {
             nc.connector.setSourceShape(shape);
         });
 
-        connectMenu.getItems().addAll(connectBefore, connectAfter, disconnect);
+        connectMenu.getItems().addAll(connectBefore, connectAfter, mitigate,disconnect);
         contextMenu.getItems().add(connectMenu);
 
         return connectMenu;

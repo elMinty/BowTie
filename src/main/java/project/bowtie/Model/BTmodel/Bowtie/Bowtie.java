@@ -5,13 +5,16 @@ import project.bowtie.Model.BTmodel.Nodes.*;
 
 public class Bowtie {
     private Node topEvent;
-    private AttackTree attackTree;
-    private ConsequenceTree consequenceTree;
+    public AttackTree attackTree;
+    public ConsequenceTree consequenceTree;
 
     public Bowtie(Node topEvent) {
         this.topEvent = topEvent;
         this.attackTree = AttackTree.getInstance(topEvent);
         this.consequenceTree = ConsequenceTree.getInstance(topEvent);
+
+        this.attackTree.setTopEvent(topEvent);
+        this.consequenceTree.setTopEvent(topEvent);
 
     }
 

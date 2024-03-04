@@ -78,7 +78,8 @@ public class Connector {
 
                 break;
             case AFTER:
-                if (!NodeUtils.connect(nodeMap.get(sourceNodeId), nodeMap.get(targetNodeId))){connectAlert(ConnectionMode.AFTER);}
+                System.out.println("Connecting " + sourceNodeId + " to " + targetNodeId);
+                if (!NodeUtils.connect(nodeMap.get(sourceNodeId), nodeMap.get(targetNodeId))){connectAlert(ConnectionMode.AFTER); System.out.println("Invalid connection");}
                 else {
 
                 Node sourceNode = nodeMap.get(sourceNodeId);
@@ -90,6 +91,19 @@ public class Connector {
 
                 }
                 break;
+
+            case MITIGATE:
+                if (!NodeUtils.mitigate(nodeMap.get(sourceNodeId), nodeMap.get(targetNodeId))){connectAlert(ConnectionMode.MITIGATE);}
+                else {
+                    Node sourceNode = nodeMap.get(sourceNodeId);
+                    // Instantiate ConnectLine and bind it to the shapes
+                    ConnectLine line = new ConnectLine(sourceShape, targetShape, ConnectionMode.MITIGATE);
+                    //Store the connection
+                    String hash = generateConnectionHash(sourceNodeId, targetNodeId);
+                    connections.put(hash, line);
+                }
+                break;
+
             case NONE:
                 System.out.println("Invalid connection");
                 connectAlert(ConnectionMode.NONE);
@@ -114,8 +128,6 @@ public class Connector {
                         Node sourceNode = nodeMap.get(sourceNodeId);
                         Node targetNode = nodeMap.get(targetNodeId);
 
-                        sourceNode.listAdjoiningNodes();
-                        targetNode.listAdjoiningNodes();
                     }
                 }
                 break;
@@ -196,6 +208,11 @@ public class Connector {
                 // alert invalid connection
                 alert.setHeaderText("Invalid Connection");
                 alert.setContentText("Check connection type and try again");
+                break;
+            case MITIGATE:
+                // show invalid mitigation
+                alert.setHeaderText("Invalid Mitigation");
+                alert.setContentText("Check if nodes are connected and try again");
                 break;
             case NONE:
                 // show invalid connection

@@ -82,6 +82,14 @@ public class ConnectLine extends Line {
                     x -= shape.getBoundsInParent().getWidth() / 2; // Move X to the right
                 }
                 break;
+
+            case MITIGATE:
+                 if (isSource) { // connect to top else connect to bottom
+                     y -= shape.getBoundsInParent().getHeight() / 2; // Move Y to the bottom
+                    } else {
+                        y += shape.getBoundsInParent().getHeight() / 2; // Move Y to the top
+                    }
+                break;
         }
 
         return new Point2D(x, y);

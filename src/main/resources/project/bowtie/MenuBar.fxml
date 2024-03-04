@@ -21,15 +21,13 @@
                 <MenuItem fx:id="closeMenuItem" text="Close" onAction="#handleClose"/>
             </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-        </Menu>
         <Menu mnemonicParsing="false" text="View">
 
             <items>
                 <MenuItem fx:id="screenshotMenuItem" text="Screenshot" onAction="#handleScreenshot" />
+            </items>
+            <items>
+                <MenuItem fx:id="PathMenuItem" text="Path" onAction="#handlePath" />
             </items>
 
         </Menu>

@@ -89,6 +89,7 @@ public class Dialogs {
         dialog.getDialogPane().getButtonTypes().addAll(scoreButtonType, ButtonType.CANCEL);
 
         // Create the confidentiality, integrity, and availability labels and choices.
+        // ALSO Non-repudiation, Authentication, Authorization, Integrity, Confidentiality, Availability
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);

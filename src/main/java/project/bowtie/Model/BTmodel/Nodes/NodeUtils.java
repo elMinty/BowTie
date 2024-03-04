@@ -9,46 +9,49 @@ public class NodeUtils {
     // Maps to define valid relationships
     private static final Map<NodeType, EnumSet<NodeType>> validPredecessors = new HashMap<>();
     private static final Map<NodeType, EnumSet<NodeType>> validSuccessors = new HashMap<>();
+    private static final Map<NodeType, EnumSet<NodeType>> validMitigator = new HashMap<>();
 
     // define relationships between nodes
 
-//    Node TYPE	        PRECEDING NODES	                                        SUCEEDING NODES
-//    THREAT	        And, Action	                                            Action, Exposure, None
-//    AND	            Action, Vulnerability	                                Action, Threat, Top Event
-//    ACTION	        Action, Threat, And, Vulnerability, Mitigation, None	Action, Threat, And, Exposure
-//    VULNERABILITY	    None	                                                And
-//    MITIGATION	    Counter-Mitigation , None	                            Action, Vulnerability
-//    COUNTER Mit	    None	                                                Mitigation
-//    EXPOSURE	        And, Action, Threat	                                    None
+//    Node TYPE	        PRECEDING NODES	                                        SUCEEDING NODES                          Mitigator
+//    THREAT	        And, Action	                                            Action, Exposure, None                      None
+//    AND	            Action, Vulnerability	                                Action, Threat, Top Event                   None
+//    ACTION	        Action, Threat, And, Vulnerability,None	                Action, Threat, And, Exposure               Mitigation
+//    VULNERABILITY	    None	                                                And                                         Mitigation
+//    MITIGATION	    None	                                                none                                        Counter-Mitigation
+//    COUNTER Mit	    None	                                                None                                        None
+//    EXPOSURE	        And, Action, Threat	                                    None                                        None
 
     static {
 
-
-
         validPredecessors.put(NodeType.THREAT, EnumSet.of(NodeType.AND, NodeType.ACTION));
-        validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE));
-
-        //TOP EVENT has same logical connections as THREAT
-        validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION));
-        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE));
-
         validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY));
-        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT));
-
-        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.TOP_EVENT,NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.MITIGATION, NodeType.NONE));
-        validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.TOP_EVENT,NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE));
-
+        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT));
         validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
-        validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND));
-
-        validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.COUNTER_MITIGATION, NodeType.NONE));
-        validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY));
-
+        validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
         validPredecessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
-        validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.MITIGATION));
-
         validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT));
+        validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION,NodeType.NONE));
+
+        validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE));
+        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT));
+        validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
+        validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND));
+        validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
         validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE,NodeType.ACTION, NodeType.EXPOSURE));
+
+
+        validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
+        validMitigator.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.MITIGATION));
+        validMitigator.put(NodeType.MITIGATION, EnumSet.of(NodeType.COUNTER_MITIGATION));
+        validMitigator.put(NodeType.THREAT, EnumSet.of(NodeType.NONE));
+        validMitigator.put(NodeType.AND, EnumSet.of(NodeType.NONE));
+        validMitigator.put(NodeType.EXPOSURE, EnumSet.of(NodeType.NONE));
+        validMitigator.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
+
+
 
 
 
@@ -62,6 +65,14 @@ public class NodeUtils {
             beforeNode.addAfterNode(afterNode);
             afterNode.addBeforeNode(beforeNode);
 
+            return true;
+        }
+        return false;
+    }
+
+    public static Boolean mitigate(Node node, Node mitigator) {
+        if (isValidMitigator(node.getType(), mitigator.getType())) {
+            node.addMitigationNode(mitigator);
             return true;
         }
         return false;
@@ -176,6 +187,10 @@ public class NodeUtils {
 
         return beforeTrue && afterTrue;
 
+    }
+
+    public static boolean isValidMitigator(NodeType node, NodeType mitigator) {
+        return validMitigator.getOrDefault(node, EnumSet.noneOf(NodeType.class)).contains(mitigator);
     }
 
     public static boolean areConnected(Node beforeNode, Node afterNode) {
