@@ -3,13 +3,19 @@ package project.bowtie;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import project.bowtie.App.Controllers.MenuBarController;
 import project.bowtie.App.Controllers.ViewPaneController;
 
 
+/**
+ * JavaFX App
+ *
+ * This class is the entry point for the application. It loads the main.fxml file and sets up the stage.
+ * Sets the controller as BTController and initializes it.
+ *
+ */
 public class BTController{
 
     public AnchorPane viewPane;
@@ -17,12 +23,18 @@ public class BTController{
     private Scene scene;
 
 
-
+    // FXML elements
     @FXML private MenuBarController menuBarController;
-
     @FXML private ViewPaneController viewPaneController;
 
-    // This method will be explicitly called from BTApp after the scene is set
+    /**
+     * Start method for the application
+     * Initiates Controller which sets for the MenuBarController and ViewPaneController
+     *
+     * @param stage app stage
+     * @param scene app scene
+     *
+     */
     public void initController(Scene scene, Stage stage) {
         this.scene = scene;
         if (viewPaneController != null) {
@@ -40,6 +52,4 @@ public class BTController{
     public void setScene(Scene scene) {
         this.scene = scene;
     }
-
-
 }

@@ -2,33 +2,45 @@ package project.bowtie;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import project.bowtie.App.Controllers.MenuBarController;
 
 import java.io.IOException;
 
+
+/**
+ * JavaFX App
+ *
+ * This class is the entry point for the application. It loads the main.fxml file and sets up the stage.
+ * Sets the controller as BTController and initializes it.
+ *
+ */
 public class BTApp extends Application {
 
-    public Scene scene;
-    public Stage stage;
+    public Scene scene; // Main scene
+    public Stage stage; // Main stage
 
+    /**
+     * Start method for the application
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
-        this.stage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(BTApp.class.getResource("main.fxml"));
-        scene = new Scene(fxmlLoader.load(), 3000, 3000);
+        this.stage = stage; // Set the stage
+        FXMLLoader fxmlLoader = new FXMLLoader(BTApp.class.getResource("main.fxml")); // Load the main.fxml file
+        scene = new Scene(fxmlLoader.load(), 3000, 3000); // Set the scene
 
 
-        BTController controller = fxmlLoader.getController();
-        controller.initController(scene, stage);
+        BTController controller = fxmlLoader.getController(); // Get the controller
+        controller.initController(scene, stage); // Initialize the controller
 
 
         // set actual size as max
         stage.setMaxHeight(3000);
         stage.setMaxWidth(3000);
 
+        // Set the stage
         stage.setTitle("BowTie");
         stage.setScene(scene);
         stage.setResizable(true);
@@ -40,6 +52,10 @@ public class BTApp extends Application {
         return stage;
     }
 
+    /**
+     * Main method
+     * @param args Not necessary
+     */
     public static void main(String[] args) {
         launch();
     }

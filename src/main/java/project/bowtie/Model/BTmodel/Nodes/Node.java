@@ -6,19 +6,43 @@ import project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeLabel;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Node class
+ *
+ * This class is used to represent a node in the BowTie model.
+ * It contains information about the node, such as its type, name, id, and the nodes that come before and after it.
+ * It also contains information about the node's description, score, and labels.
+ *
+ * @see NodeType
+ * @see NodeLabel
+ * @see NodeUtils
+ *
+ */
+
 public class Node {
+
     private NodeType type; // Type of node
     private String name; // Name of node
     private String id; // ID of node
     private Map<String, Node> beforeNodes; // Maps IDs to NodeFactory leading to this node
     private Map<String, Node> afterNodes;  // Maps IDs to NodeFactory that this node leads to
     private Map<String, Node> mitigationNodes; // NodeFactory that mitigate this node
-    private String description;
-    private String score;
-    private NodeLabel nameLabel;
-    private NodeLabel descriptionLabel;
-    private NodeLabel scoreLabel;
+    private String description; // Description of node
+    private String score; // Score of node
+    private NodeLabel nameLabel; // Label for the name of the node
+    private NodeLabel descriptionLabel; // Label for the description of the node
+    private NodeLabel scoreLabel; // Label for the score of the node
 
+    /**
+     * Constructor for Node
+     * Initialises: Hashmaps for beforeNodes, afterNodes, and mitigationNodes
+     * Initialises: description, score, nameLabel, descriptionLabel, and scoreLabel
+     * Sets the ID, type, and name of the node
+     *
+     * @param ID ID of node
+     * @param type Type of node @see NodeType
+     * @param name Name of node
+     */
     public Node(String ID, NodeType type, String name) {
         this.type = type;
         this.name = name;
@@ -34,7 +58,12 @@ public class Node {
 
     }
 
-    // destructor
+    /**
+     * Destructor for Node
+     * Sets type, name, and ID to null
+     * Sets beforeNodes, afterNodes, and mitigationNodes to null
+     *
+     */
     public void destroy() {
         setType(null);
         setName(null);
@@ -42,29 +71,26 @@ public class Node {
         beforeNodes = null;
         afterNodes = null;
         mitigationNodes = null;
-
     }
 
 
-
-    // returns if this node had any mitigation nodes
-
+    // Tells if this node has before, after, or mitigation nodes
     public boolean hasMitigationNodes() {
         return !mitigationNodes.isEmpty();
     }
 
     // Tells if this node is a threat or a vulnerability
-
     public boolean isAttackRoot() {
         return beforeNodes.isEmpty();
     }
 
+    // Tells if this node is a consequence or a mitigation
     public boolean isConsequenceLeaf() {
         return afterNodes.isEmpty();
     }
 
-    // getters
 
+    // getters /////////////////////////////////////////////////////////////////////////////////////////////////////////
     public NodeType getType() {
         return type;
     }
@@ -105,6 +131,12 @@ public class Node {
         return descriptionLabel;
     }
 
+    public Map<String, Node> getMitigationNodes() {
+        return mitigationNodes;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // setters
 
     public void setType(NodeType type) {
@@ -139,10 +171,9 @@ public class Node {
         this.descriptionLabel = descriptionLabel;
     }
 
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Logic for adding and removing nodes
-
     public void addBeforeNode(Node node) {
         beforeNodes.put(node.getId(), node);
     }
@@ -167,9 +198,7 @@ public class Node {
         mitigationNodes.remove(node.getId());
     }
 
-    public Map<String, Node> getMitigationNodes() {
-        return mitigationNodes;
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // print and testing
 
@@ -193,4 +222,6 @@ public class Node {
         System.out.println("After: {" + after + "}");
 
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
