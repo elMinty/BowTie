@@ -1,6 +1,7 @@
 package project.bowtie.App.Controllers.ViewPane.Obj.Lines;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
@@ -15,19 +16,32 @@ import project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode;
 public class ConnectLine extends Line {
 
     public ConnectLine(Shape sourceShape, Shape targetShape, ConnectionMode connectType) {
-
         AnchorPane parent = (AnchorPane) sourceShape.getParent();
-        // Calculate and bind start point to the source shape's center
-        Point2D sourceCenter = getShapeCenter(sourceShape, connectType, true);
-        startXProperty().bind(Bindings.add(sourceShape.layoutXProperty(), sourceShape.translateXProperty()).add(sourceCenter.getX()));
-        startYProperty().bind(Bindings.add(sourceShape.layoutYProperty(), sourceShape.translateYProperty()).add(sourceCenter.getY()));
 
-        // Calculate and bind end point to the target shape's center
-        Point2D targetCenter = getShapeCenter(targetShape, connectType, false);
-        endXProperty().bind(Bindings.add(targetShape.layoutXProperty(), targetShape.translateXProperty()).add(targetCenter.getX()));
-        endYProperty().bind(Bindings.add(targetShape.layoutYProperty(), targetShape.translateYProperty()).add(targetCenter.getY()));
+        // Dynamically bind start and end points to the source and target shapes' center points, considering scale
+        DoubleBinding startXBinding = Bindings.createDoubleBinding(() ->
+                        sourceShape.getLayoutX() + sourceShape.getTranslateX() + getShapeCenter(sourceShape, connectType, true).getX() * sourceShape.getScaleX(),
+                sourceShape.layoutXProperty(), sourceShape.translateXProperty(), sourceShape.scaleXProperty());
 
-        // Add this line to the parent container
+        DoubleBinding startYBinding = Bindings.createDoubleBinding(() ->
+                        sourceShape.getLayoutY() + sourceShape.getTranslateY() + getShapeCenter(sourceShape, connectType, true).getY() * sourceShape.getScaleY(),
+                sourceShape.layoutYProperty(), sourceShape.translateYProperty(), sourceShape.scaleYProperty());
+
+        DoubleBinding endXBinding = Bindings.createDoubleBinding(() ->
+                        targetShape.getLayoutX() + targetShape.getTranslateX() + getShapeCenter(targetShape, connectType, false).getX() * targetShape.getScaleX(),
+                targetShape.layoutXProperty(), targetShape.translateXProperty(), targetShape.scaleXProperty());
+
+        DoubleBinding endYBinding = Bindings.createDoubleBinding(() ->
+                        targetShape.getLayoutY() + targetShape.getTranslateY() + getShapeCenter(targetShape, connectType, false).getY() * targetShape.getScaleY(),
+                targetShape.layoutYProperty(), targetShape.translateYProperty(), targetShape.scaleYProperty());
+
+        // Apply the bindings
+        startXProperty().bind(startXBinding);
+        startYProperty().bind(startYBinding);
+        endXProperty().bind(endXBinding);
+        endYProperty().bind(endYBinding);
+
+        // Add this line to the parent container if not already present
         if (!parent.getChildren().contains(this)) {
             parent.getChildren().add(this);
         }

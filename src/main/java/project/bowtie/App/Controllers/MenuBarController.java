@@ -4,6 +4,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ColorPicker;
@@ -12,6 +13,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -218,6 +220,7 @@ public class MenuBarController{
     /**
      * Sets the zoom level of the view pane
      * @param zoomFactor the zoom factor
+     * @deprecated
      */
     private void setZoomLevel(double zoomFactor) {
         // Assuming 'viewPaneRoot' is your AnchorPane you want to zoom in/out
@@ -229,15 +232,13 @@ public class MenuBarController{
         viewPaneController.setScale(zoomFactor); // Set the scale in the ViewPaneController
         // The ScrollPane or any parent container should automatically adjust the scrollbars
 
-        for (javafx.scene.Node child : viewPaneRoot.getChildren()) {
-            // Scale each child by the zoomFactor
-            child.setScaleX(zoomFactor);
-            child.setScaleY(zoomFactor);
-        }
+        // Apply zoom and translation to the children of the view pane
+        applyZoomAndTranslation(zoomFactor);
     }
 
     /**
      * Handles zoom actions from the menu items.
+     * @param event the action event
      */
     @FXML
     private void handleZoomAction(ActionEvent event) {
@@ -250,6 +251,37 @@ public class MenuBarController{
         }
     }
 
+    private void applyZoomAndTranslation(double zoomFactor) {
+
+        Point2D fixedPoint = new Point2D(0,0); // Fixed point (center of the view pane
+
+        for (javafx.scene.Node child : viewPaneRoot.getChildren()) {
+            // Calculate the original center of the shape
+            Point2D originalCenter = new Point2D(child.getLayoutBounds().getWidth() / 2, child.getLayoutBounds().getHeight() / 2);
+            Point2D originalCenterInParent = child.localToParent(originalCenter);
+
+            // Apply zoom
+            child.setScaleX(zoomFactor);
+            child.setScaleY(zoomFactor);
+
+            // Calculate the new center of the shape after scaling
+            Point2D newCenter = new Point2D(child.getLayoutBounds().getWidth() / 2 * zoomFactor, child.getLayoutBounds().getHeight() / 2 * zoomFactor);
+            Point2D newCenterInParent = child.localToParent(newCenter);
+
+            // Calculate the delta from the fixed point
+            Point2D deltaFromFixedPoint = originalCenterInParent.subtract(fixedPoint);
+
+            // Adjust the position to keep the shape's center correctly positioned relative to the zoom
+            Point2D newPosition = fixedPoint.add(deltaFromFixedPoint.multiply(zoomFactor)).subtract(newCenter);
+            child.setLayoutX(newPosition.getX());
+            child.setLayoutY(newPosition.getY());
+        }
+    }
+
+    /**
+     * Handles the color action
+     * @param e the action event
+     */
     @FXML
     private void handleColor(ActionEvent e) {
         // get color from colour wheel
