@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<shapes>
+    <shape id="0" scaleX="1.0" scaleY="1.0" type="TOP_EVENT" x="660.0" y="85.0">
+        <node description="" id="0" name="TOP_EVENT0" score="" type="TOP_EVENT">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+</shapes>

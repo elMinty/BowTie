@@ -11,20 +11,16 @@ import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
-import project.bowtie.IO.ShapeExporter;
-import project.bowtie.IO.ShapeImporter;
-import project.bowtie.Model.BTmodel.Bowtie.AttackTree;
-import project.bowtie.Model.BTmodel.Nodes.Node;
+import project.bowtie.IO.*;
+import project.bowtie.Model.BTmodel.Nodes.*;
 
 import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.xml.parsers.*;
+import java.io.*;
 
+/**
+ * Controller for the menu bar - handles save, open, screenshot, and close actions
+ */
 public class MenuBarController{
 
     private Stage mainStage;
@@ -33,23 +29,37 @@ public class MenuBarController{
     private AnchorPane viewPaneRoot;
     private NodeController nodeController;
     private ViewPaneController viewPaneController;
+    private boolean closeFlag = false;
 
-
+    /**
+     * Initializes the menu bar
+     * @param scene the scene
+     * @param stage the stage
+     */
     public void initMenuBar(Scene scene, Stage stage){
         this.scene = scene;
         this.stage = stage;
     }
 
-
+    /**
+     * Sets the root of the view pane
+     * @param root the root of the view pane
+     */
     public void setViewPaneRoot(AnchorPane root) {
         this.viewPaneRoot = root;
     }
 
+    /**
+     * Sets the node controller
+     * @param nodeController the node controller
+     */
     public void setNodeController(NodeController nodeController) {
         this.nodeController = nodeController;
     }
 
-
+    /**
+     * Handles the save action
+     */
     public void handleSaveAction() {
         FileChooser fileChooser = new FileChooser();
         // Set extension filter for text files
@@ -57,6 +67,13 @@ public class MenuBarController{
         fileChooser.getExtensionFilters().add(extFilter);
         // set initial directory for current directory
         fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
+
+        //Change dialog if Save on close
+        if (closeFlag) {
+            // Show dialog - Do you want to save before closing?
+            fileChooser.setTitle("Unsaved Changes... Save before closing?");
+            fileChooser.setInitialFileName("Bowtie");
+        }
 
         // Show save file dialog
         Stage stage = (Stage) viewPaneRoot.getScene().getWindow(); // Assuming 'anchorPane' is your AnchorPane instance
@@ -68,6 +85,11 @@ public class MenuBarController{
         }
     }
 
+    /**
+     * Saves the content to a file
+     * @param content the content to save
+     * @param file the file to save to
+     */
     private void saveTextToFile(String content, File file) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
@@ -77,11 +99,22 @@ public class MenuBarController{
         }
     }
 
+    /**
+     * Handles the close action
+     * @param actionEvent the action event
+     */
     public void handleClose(ActionEvent actionEvent) {
+        // Check if user wants to Save
+        closeFlag = true;
+        handleSaveAction();
         System.out.println("Close action triggered");
         stage.close();
     }
 
+    /**
+     * Handles the screenshot action - Screenshots to PNG
+     * @param actionEvent the action event
+     */
     public void handleScreenshot(ActionEvent actionEvent) { // Include AnchorPane in the arguments
 
         FileChooser fileChooser = new FileChooser();
@@ -105,7 +138,10 @@ public class MenuBarController{
         }
     }
 
-
+    /**
+     * Handles the open action
+     * @param actionEvent the action event
+     */
     public void handleOpenAction(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         // Set extension filter for text files
@@ -153,13 +189,20 @@ public class MenuBarController{
         }
     }
 
+    /**
+     * Sets the view pane controller
+     * @param viewPaneController the view pane controller
+     */
     public void setVPC(ViewPaneController viewPaneController) {
         this.viewPaneController = viewPaneController;
     }
 
+    /**
+     * Handles the path action
+     * @param actionEvent the action event
+     */
     public void handlePath(ActionEvent actionEvent) {
         // print TopEvent ID
         this.viewPaneController.bowtie.attackTree.getPaths();
-
     }
 }

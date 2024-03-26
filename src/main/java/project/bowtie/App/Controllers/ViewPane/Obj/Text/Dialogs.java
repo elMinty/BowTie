@@ -3,19 +3,18 @@ package project.bowtie.App.Controllers.ViewPane.Obj.Text;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
-
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A class that provides dialog options for scoring different aspects of a threat model.
+ */
 public class Dialogs {
 
     // dialog option for vulnerability score
     public static javafx.scene.control.Dialog<List<String>> vulnerabilityDialog() {
 
         // Vulnerability metrics: Attack Vector, Attack Complexity, Privileges Required, User Interaction
-
         // Create the custom dialog.
         javafx.scene.control.Dialog<List<String>> dialog = new javafx.scene.control.Dialog<>();
         dialog.setTitle("Vulnerability Score");
@@ -70,8 +69,6 @@ public class Dialogs {
             }
             return null;
         });
-
-
         return dialog;
     }
 
@@ -197,7 +194,6 @@ public class Dialogs {
         healthSafetyChoice.setValue("None");
         reputationChoice.setValue("None");
 
-
         // Convert the result to a List<String> when the score button is clicked.
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == scoreButtonType) {
@@ -213,15 +209,14 @@ public class Dialogs {
             }
             return null;
         });
-
         return dialog;
 
     }
 
+    // dialog option for Mitigation score
     public static Dialog<List<String>> effectivenessDifficultyDialog() {
 
         // Mitigation categories: Effectiveness, Difficulty -> Potentially coverage??
-
         // Create the custom dialog.
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Effectiveness & Difficulty Score");
@@ -263,7 +258,6 @@ public class Dialogs {
         grid.add(new Label("Opportunity:"), 0, 3);
         grid.add(opportunityChoice, 1, 3);
 
-
         dialog.getDialogPane().setContent(grid);
 
         // Convert the result when the score button is clicked.
@@ -278,12 +272,6 @@ public class Dialogs {
             }
             return null;
         });
-
-
         return dialog;
     }
-
-
-
-
 }

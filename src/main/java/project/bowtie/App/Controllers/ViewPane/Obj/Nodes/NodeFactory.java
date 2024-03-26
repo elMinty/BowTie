@@ -8,6 +8,9 @@ import javafx.scene.shape.Shape;
 
 import project.bowtie.Model.BTmodel.Nodes.NodeType;
 
+/**
+ * A factory class that creates different types of shapes for the view pane based on the NodeType.
+ */
 public class NodeFactory{
 
     public static Shape createNode(NodeType type) {

@@ -13,7 +13,6 @@ module project.bowtie {
     requires org.kordamp.bootstrapfx.core;
     requires javafx.swing;
 
-
     opens project.bowtie to javafx.fxml;
     opens project.bowtie.IO to java.xml.bind;
     exports project.bowtie;

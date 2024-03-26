@@ -1,13 +1,14 @@
 package project.bowtie.App.Controllers.ViewPane.Obj.Text;
 
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.TextArea;
 
+/**
+ * A resizable text box that can be added to the view pane.
+ * @deprecated This class is not used in the current implementation of the project.
+ */
 public class ResizableTextBox extends StackPane {
 
     private Rectangle borderRectangle;

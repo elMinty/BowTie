@@ -5,19 +5,18 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.*;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode;
 
-import java.util.Objects;
-
+/**
+ * A line that connects two shapes in the view pane.
+ * @see project.bowtie.App.Controllers.ViewPane.Menus.ConnectionMode
+ * @see project.bowtie.App.Controllers.ViewPane.Obj.Lines.Connector
+ */
 public class ConnectLine extends Line {
 
     public ConnectLine(Shape sourceShape, Shape targetShape, ConnectionMode connectType) {
 
         AnchorPane parent = (AnchorPane) sourceShape.getParent();
-
-
         // Calculate and bind start point to the source shape's center
         Point2D sourceCenter = getShapeCenter(sourceShape, connectType, true);
         startXProperty().bind(Bindings.add(sourceShape.layoutXProperty(), sourceShape.translateXProperty()).add(sourceCenter.getX()));
@@ -34,6 +33,13 @@ public class ConnectLine extends Line {
         }
     }
 
+    /**
+     * Get the center of a shape based on the connection mode and whether it is the source or target shape.
+     * @param shape The shape to get the center of
+     * @param conn The connection mode
+     * @param isSource Whether the shape is the source or target shape
+     * @return The center of the shape
+     */
     public static Point2D getShapeCenter(Shape shape, ConnectionMode conn, boolean isSource) {
         double x;
         double y;
@@ -73,7 +79,6 @@ public class ConnectLine extends Line {
                 } else {
                     x += shape.getBoundsInParent().getWidth() / 2; // Move X to the left
                 }
-
                 break;
             case AFTER:
                 if (isSource) {
@@ -82,7 +87,6 @@ public class ConnectLine extends Line {
                     x -= shape.getBoundsInParent().getWidth() / 2; // Move X to the right
                 }
                 break;
-
             case MITIGATE:
                  if (isSource) { // connect to top else connect to bottom
                      y -= shape.getBoundsInParent().getHeight() / 2; // Move Y to the bottom
@@ -91,7 +95,6 @@ public class ConnectLine extends Line {
                     }
                 break;
         }
-
         return new Point2D(x, y);
     }
 }

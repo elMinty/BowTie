@@ -10,7 +10,11 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Controller for dragging a Node
+ * @deprecated This class is no longer used in the project - it was replaced by a new dragging implementation
 
+ */
 public class DragController {
     private final Node target;
     private double anchorX;
@@ -24,9 +28,6 @@ public class DragController {
     private final int INACTIVE = 0;
     private int cycleStatus = INACTIVE;
     private BooleanProperty isDraggable;
-
-
-
 
     public DragController(Node target) {
         this(target, false);
@@ -61,8 +62,6 @@ public class DragController {
                 target.setTranslateX(event.getX() - anchorX);
                 target.setTranslateY(event.getY() - anchorY);
                 // Additional logic to update the label's position
-
-
             }
         };
         commitPositionOnRelease = event -> {
