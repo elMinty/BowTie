@@ -3,26 +3,46 @@ package project.bowtie.Model.BTmodel.Bowtie;
 import javafx.util.Pair;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 import project.bowtie.Model.BTmodel.Nodes.path;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Attack Tree class - provides tree structure for before the Top-Event
+ * Used in the Bowtie Class
+ *
+ * @see Bowtie
+ * @see Tree
+ */
 public class AttackTree extends Tree {
     private HashMap<String, Node> rootNodes = new HashMap<>();
     private List<path> paths = new ArrayList<>();
     private static AttackTree instance;
     private Node TopEvent;
 
+    /**
+     * Constructor for the AttackTree class
+     *
+     * @param rootNode The root node of the tree - type node
+     */
     private AttackTree(Node rootNode) {
         super(rootNode);
 
     }
 
+    /**
+     * Setter for the top event of the tree
+     * @param topEvent The top event of the tree - type node
+     */
     public void setTopEvent(Node topEvent) {
         this.TopEvent = topEvent;
     }
 
+    /**
+     * Getter for the top event of the tree - if the tree is null, create a new instance
+     * @param rootNode The root node of the tree
+     * @return The Attack Tree instance
+     */
     public static AttackTree getInstance(Node rootNode) {
         if (instance == null) {
             instance = new AttackTree(rootNode);
@@ -31,7 +51,12 @@ public class AttackTree extends Tree {
     }
 
     // Specific methods for attack tree
-    // counter functions
+
+    /**
+     *
+     * @param root top event of the tree
+     * @return the minimum depth of the tree
+     */
     public int findMinimumDepth(Node root) {
         if (root == null) return 0;
         if (root.isConsequenceLeaf()) return 1;
@@ -43,6 +68,12 @@ public class AttackTree extends Tree {
         return minDepth + 1;
     }
 
+    /**
+     * Find the maximum depth of the tree
+     *
+     * @param root top event of the tree
+     * @return the maximum depth of the tree
+     */
     public int findMaximumDepth(Node root) {
         if (root == null) return 0;
         if (root.isConsequenceLeaf()) return 1;
@@ -54,6 +85,12 @@ public class AttackTree extends Tree {
         return maxDepth + 1;
     }
 
+    /**
+     * Count the number of nodes in the tree
+     *
+     * @param root The top event of the tree
+     * @return The number of nodes in the tree
+     */
     public int countNodes(Node root) {
         // Base case: if the current node is null, return 0.
         if (root == null) return 0;
@@ -69,6 +106,11 @@ public class AttackTree extends Tree {
         // Return the total count.
         return count;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // PATH FUNCTIONS \\
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // Adjusted to work with the updated path class
     public static void findAllPaths(Node node, path currentPath, List<path> allPaths) {

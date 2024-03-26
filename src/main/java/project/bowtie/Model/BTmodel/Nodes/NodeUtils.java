@@ -270,10 +270,23 @@ public class NodeUtils {
 
     }
 
+    /** Checks if a mitigator is valid for a given node
+     *
+     * @param node The node to be mitigated
+     * @param mitigator The node that mitigates the node
+     * @return true if the mitigator is valid, false otherwise
+     */
     public static boolean isValidMitigator(NodeType node, NodeType mitigator) {
         return validMitigator.getOrDefault(node, EnumSet.noneOf(NodeType.class)).contains(mitigator);
     }
 
+    /**
+     * Checks if two nodes are connected
+     *
+     * @param beforeNode The node before the connection
+     * @param afterNode The node after the connection
+     * @return true if the nodes are connected, false otherwise
+     */
     public static boolean areConnected(Node beforeNode, Node afterNode) {
 
         // get if before is connected to after
@@ -283,6 +296,12 @@ public class NodeUtils {
         return beforeAfter && afterBefore;
     }
 
+    /**
+     * Gets the NodeType from a string
+     *
+     * @param type The string representation of the NodeType
+     * @return The NodeType
+     */
     public static NodeType getNodeType(String type) {
         switch (type) {
             case "THREAT":

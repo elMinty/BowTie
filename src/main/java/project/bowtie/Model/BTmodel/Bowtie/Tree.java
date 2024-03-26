@@ -1,12 +1,19 @@
 package project.bowtie.Model.BTmodel.Bowtie;
 
 import project.bowtie.Model.BTmodel.Nodes.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class is the abstract class for the attack tree and consequence tree
+ * Provides Inherent functions and node counter
+ *
+ * @author Euan Murray
+ * @see AttackTree
+ * @see ConsequenceTree
+ */
 public abstract class Tree {
     protected Node TopEvent;
     protected Map<String, Node> nodes;
@@ -16,6 +23,11 @@ public abstract class Tree {
     private HashMap<String, Node> leafNodes;
     private List<path> paths;
 
+    /**
+     * Constructor for the Tree class
+     *
+     * @param topEvent The top event of the tree - type node
+     */
     public Tree(Node topEvent) {
         this.TopEvent = topEvent;
         this.nodes = new HashMap<>();
