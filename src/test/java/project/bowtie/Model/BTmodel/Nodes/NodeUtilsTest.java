@@ -113,50 +113,42 @@ class NodeUtilsTest {
 
     @Test
     void isValidConnection() {
-        //    Node TYPE	        PRECEDING NODES	                                        SUCEEDING NODES
-//    THREAT	        And, Action	                                            Action, Exposure, None
-//    AND	            Action, Vulnerability	                                Action, Threat
-//    ACTION	        Action, Threat, And, Vulnerability, Mitigation, None	Action, Threat, And, Exposure
-//    VULNERABILITY	    None	                                                And
-//    MITIGATION	    Counter-Mitigation , None	                            Action, Vulnerability
-//    COUNTER Mit	    None	                                                Mitigation
-//    EXPOSURE	        And, Action, Threat	                                    None
 
-        assertTrue(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.ACTION));
-        assertTrue(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.EXPOSURE));
-        assertTrue(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.NONE));
-        assertFalse(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.VULNERABILITY));
-        assertFalse(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.MITIGATION));
-        assertFalse(NodeUtils.isValidConnection(NodeType.THREAT, NodeType.COUNTER_MITIGATION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.THREAT, NodeType.ACTION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.THREAT, NodeType.EXPOSURE));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.THREAT, NodeType.NONE));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.THREAT, NodeType.VULNERABILITY));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.THREAT, NodeType.MITIGATION));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.THREAT, NodeType.COUNTER_MITIGATION));
 
-        assertTrue(NodeUtils.isValidConnection(NodeType.AND, NodeType.ACTION));
-        assertTrue(NodeUtils.isValidConnection(NodeType.AND, NodeType.THREAT));
-        assertFalse(NodeUtils.isValidConnection(NodeType.AND, NodeType.EXPOSURE));
-        assertFalse(NodeUtils.isValidConnection(NodeType.AND, NodeType.NONE));
-        assertTrue(NodeUtils.isValidConnection(NodeType.AND, NodeType.VULNERABILITY));
-        assertFalse(NodeUtils.isValidConnection(NodeType.AND, NodeType.MITIGATION));
-        assertFalse(NodeUtils.isValidConnection(NodeType.AND, NodeType.COUNTER_MITIGATION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.AND, NodeType.ACTION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.AND, NodeType.THREAT));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.AND, NodeType.EXPOSURE));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.AND, NodeType.NONE));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.AND, NodeType.VULNERABILITY));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.AND, NodeType.MITIGATION));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.AND, NodeType.COUNTER_MITIGATION));
 
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.ACTION));
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.THREAT));
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.AND));
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.VULNERABILITY));
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.MITIGATION));
-        assertTrue(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.NONE));
-        assertFalse(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.EXPOSURE));
-        assertFalse(NodeUtils.isValidConnection(NodeType.ACTION, NodeType.COUNTER_MITIGATION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.ACTION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.THREAT));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.AND));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.VULNERABILITY));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.MITIGATION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.ACTION, NodeType.NONE));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.ACTION, NodeType.EXPOSURE));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.ACTION, NodeType.COUNTER_MITIGATION));
 
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.ACTION));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.THREAT));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.AND));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.VULNERABILITY));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.MITIGATION));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.NONE));
-        assertTrue(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.EXPOSURE));
-        assertFalse(NodeUtils.isValidConnection(NodeType.VULNERABILITY, NodeType.COUNTER_MITIGATION));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.ACTION));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.THREAT));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.AND));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.VULNERABILITY));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.MITIGATION));
+        assertFalse(NodeUtils.isValidTypeConnection(NodeType.VULNERABILITY, NodeType.NONE));
+        assertTrue(NodeUtils.isValidMitigator(NodeType.VULNERABILITY, NodeType.EXPOSURE));
+        assertFalse(NodeUtils.isValidMitigator(NodeType.VULNERABILITY, NodeType.COUNTER_MITIGATION));
 
-        assertTrue(NodeUtils.isValidConnection(NodeType.MITIGATION, NodeType.ACTION));
-        assertTrue(NodeUtils.isValidConnection(NodeType.MITIGATION, NodeType.VULNERABILITY));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.MITIGATION, NodeType.ACTION));
+        assertTrue(NodeUtils.isValidTypeConnection(NodeType.MITIGATION, NodeType.VULNERABILITY));
     }
 
 

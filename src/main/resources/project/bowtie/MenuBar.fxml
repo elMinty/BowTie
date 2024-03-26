@@ -29,6 +29,9 @@
             <items>
                 <MenuItem fx:id="PathMenuItem" text="Path" onAction="#handlePath" />
             </items>
+            <items>
+                <MenuItem fx:id="Background" text="Background Colour" onAction="#handleColor" />
+            </items>
 
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
@@ -36,6 +39,16 @@
                 <MenuItem mnemonicParsing="false" text="About" />
             </items>
         </Menu>
+        <Menu fx:id="zoomMenu" text="Zoom">
+            <items>
+                <MenuItem fx:id="zoom50" text="50%" onAction="#handleZoomAction"/>
+                <MenuItem fx:id="zoom75" text="75%" onAction="#handleZoomAction"/>
+                <MenuItem fx:id="zoom100" text="100%" onAction="#handleZoomAction"/>
+                <MenuItem fx:id="zoom125" text="125%" onAction="#handleZoomAction"/>
+                <MenuItem fx:id="zoom150" text="150%" onAction="#handleZoomAction"/>
+            </items>
+        </Menu>
+
     </menus>
 </MenuBar>
 

@@ -2,10 +2,16 @@ package project.bowtie.App.Controllers;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
@@ -27,6 +33,8 @@ public class MenuBarController{
     private Scene scene;
     private Stage stage;
     private AnchorPane viewPaneRoot;
+    @FXML
+    private javafx.scene.control.ScrollPane scrollPane;
     private NodeController nodeController;
     private ViewPaneController viewPaneController;
     private boolean closeFlag = false;
@@ -45,8 +53,9 @@ public class MenuBarController{
      * Sets the root of the view pane
      * @param root the root of the view pane
      */
-    public void setViewPaneRoot(AnchorPane root) {
+    public void setViewPaneRoot(AnchorPane root, ScrollPane scrollPane) {
         this.viewPaneRoot = root;
+        this.scrollPane = scrollPane;
     }
 
     /**
@@ -205,4 +214,54 @@ public class MenuBarController{
         // print TopEvent ID
         this.viewPaneController.bowtie.attackTree.getPaths();
     }
+
+    /**
+     * Sets the zoom level of the view pane
+     * @param zoomFactor the zoom factor
+     */
+    private void setZoomLevel(double zoomFactor) {
+        // Assuming 'viewPaneRoot' is your AnchorPane you want to zoom in/out
+        // Set the scroll bars for the scroll Pane
+        viewPaneRoot.setPrefSize(3000*zoomFactor, 3000*zoomFactor);
+        scrollPane.setHvalue(scrollPane.getHvalue() * zoomFactor);
+        scrollPane.setVvalue(scrollPane.getVvalue() * zoomFactor);
+
+        viewPaneController.setScale(zoomFactor); // Set the scale in the ViewPaneController
+        // The ScrollPane or any parent container should automatically adjust the scrollbars
+
+        for (javafx.scene.Node child : viewPaneRoot.getChildren()) {
+            // Scale each child by the zoomFactor
+            child.setScaleX(zoomFactor);
+            child.setScaleY(zoomFactor);
+        }
+    }
+
+    /**
+     * Handles zoom actions from the menu items.
+     */
+    @FXML
+    private void handleZoomAction(ActionEvent event) {
+        if (event.getSource() instanceof MenuItem) {
+            MenuItem menuItem = (MenuItem) event.getSource();
+            String text = menuItem.getText();
+            // Extract the numeric part from the menu item text (e.g., "100%" -> 100)
+            double zoomPercentage = Double.parseDouble(text.replace("%", ""));
+            setZoomLevel(zoomPercentage / 100); // Convert to scale factor (e.g., 1.0 for 100%)
+        }
+    }
+
+    @FXML
+    private void handleColor(ActionEvent e) {
+        // get color from colour wheel
+        ColorPicker picker = new ColorPicker();
+        viewPaneRoot.getChildren().add(picker);
+        // Color change listener
+        picker.setOnAction(event -> {
+            // Remove the picker from its parent
+            viewPaneController.setColor(picker.getValue());
+            viewPaneRoot.getChildren().remove(picker);
+        });
+    }
+
+
 }

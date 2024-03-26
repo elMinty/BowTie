@@ -3,6 +3,7 @@ package project.bowtie;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import project.bowtie.App.Controllers.MenuBarController;
@@ -10,11 +11,12 @@ import project.bowtie.App.Controllers.ViewPaneController;
 
 
 /**
- * JavaFX App
- *
- * This class is the entry point for the application. It loads the main.fxml file and sets up the stage.
- * Sets the controller as BTController and initializes it.
- *
+ * BTController class
+ * This class is the main controller for the application
+ * It initiates the MenuBarController and ViewPaneController
+ * sets the viewPane root to the MenuBarController
+ * sets the NodeController to the MenuBarController
+ * sets the ViewPaneController to the MenuBarController
  */
 public class BTController{
 
@@ -26,6 +28,8 @@ public class BTController{
     // FXML elements
     @FXML private MenuBarController menuBarController;
     @FXML private ViewPaneController viewPaneController;
+
+    @FXML private ScrollPane scrollPane;
 
     /**
      * Start method for the application
@@ -43,7 +47,7 @@ public class BTController{
         }
         if (menuBarController != null) {
             menuBarController.initMenuBar(scene, stage);
-            menuBarController.setViewPaneRoot(viewPaneController.root);
+            menuBarController.setViewPaneRoot(viewPaneController.root, scrollPane);
             menuBarController.setNodeController(viewPaneController.nc);
             menuBarController.setVPC(viewPaneController);
         }

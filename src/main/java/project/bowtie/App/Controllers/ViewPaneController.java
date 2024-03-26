@@ -3,6 +3,7 @@ package project.bowtie.App.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -16,7 +17,6 @@ import project.bowtie.Model.BTmodel.Nodes.NodeType;
  * Controller for the view pane - Initiates Bowtie Model and handles context menu
  */
 public class ViewPaneController{
-
     @FXML
     public AnchorPane root; // establish the root of the view pane
     private final ViewPaneContextMenu contextMenuBuilder = new ViewPaneContextMenu(); //establish the context menu
@@ -24,6 +24,7 @@ public class ViewPaneController{
     public NodeController nc;
     private Node topEvent;
     public Bowtie bowtie;
+    public double scale = 1.0;
     private Scene scene;
     private Stage stage;
 
@@ -71,7 +72,7 @@ public class ViewPaneController{
      * Sets to set position of the top event
      */
     private void addTopEvent() {
-        nc.handleAddNode(NodeType.TOP_EVENT, 900, 360);
+        nc.handleAddNode(NodeType.TOP_EVENT, 500, 100);
         topEvent = nc.getNode("0");
         bowtie = new Bowtie(topEvent);
     }
@@ -100,9 +101,16 @@ public class ViewPaneController{
      * @param color Color of the view pane
      */
     public void setColor(Color color){
-        root.setStyle("-fx-background-color: " + color + ";");
+        root.setStyle("-fx-background-color: " + "'" + color + "'" + ";");
     }
 
+    /**
+     * Handles the zoom action - sets scale
+     * @param scale the scale
+     */
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
 }
 
 

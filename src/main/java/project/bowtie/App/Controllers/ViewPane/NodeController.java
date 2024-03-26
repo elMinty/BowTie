@@ -187,15 +187,17 @@ public class NodeController {
         // Set mouse pressed event
         shape.setOnMousePressed(event -> {
             // Calculate the offset from the top-left corner of the rectangle
-            offsetX[0] = event.getSceneX() - shape.getLayoutX();
-            offsetY[0] = event.getSceneY() - shape.getLayoutY();
+            // Adjust by the current scale of the root pane to ensure consistency at different zoom levels
+            offsetX[0] = (event.getSceneX() - shape.getLayoutX()) / root.getScaleX();
+            offsetY[0] = (event.getSceneY() - shape.getLayoutY()) / root.getScaleY();
         });
 
         // Set mouse dragged event
         shape.setOnMouseDragged(event -> {
             // Update the position of the rectangle
-            shape.setLayoutX(event.getSceneX() - offsetX[0]);
-            shape.setLayoutY(event.getSceneY() - offsetY[0]);
+            // Consider the current scale of the root pane to match the drag distance with mouse movement
+            shape.setLayoutX((event.getSceneX() - offsetX[0] * root.getScaleX()));
+            shape.setLayoutY((event.getSceneY() - offsetY[0] * root.getScaleY()));
         });
 
         // Set context menu event
@@ -463,5 +465,34 @@ public class NodeController {
         root.getChildren().addAll(shape, infoLabel, nameLabel, scoreLabel);
 
         return shape;
+    }
+
+    public void updateNodeListeners(Shape shape) {
+        // Drag and drop listeners
+
+        // Initial drag offset
+        final double[] offsetX = {0};
+        final double[] offsetY = {0};
+
+        shape.removeEventFilter(javafx.scene.input.MouseEvent.MOUSE_PRESSED, shape.getOnMousePressed());
+        shape.removeEventFilter(javafx.scene.input.MouseEvent.MOUSE_DRAGGED, shape.getOnMouseDragged());
+
+        // Set mouse pressed event
+        shape.setOnMousePressed(event -> {
+            // Calculate the offset from the top-left corner of the rectangle
+            // Adjust by the current scale of the root pane to ensure consistency at different zoom levels
+            offsetX[0] = (event.getSceneX() - shape.getLayoutX()) / root.getScaleX();
+            offsetY[0] = (event.getSceneY() - shape.getLayoutY()) / root.getScaleY();
+        });
+
+        // Set mouse dragged event
+        shape.setOnMouseDragged(event -> {
+            // Update the position of the rectangle
+            // Consider the current scale of the root pane to match the drag distance with mouse movement
+            shape.setLayoutX((event.getSceneX() - offsetX[0] * root.getScaleX()));
+            shape.setLayoutY((event.getSceneY() - offsetY[0] * root.getScaleY()));
+        });
+
+        // The rest of your listener setup remains the same
     }
 }
