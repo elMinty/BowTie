@@ -223,5 +223,27 @@ public class Node {
 
     }
 
+    /**
+     * Checks if the node is a root node
+     * A root node is a node that has no before nodes and has after nodes
+     * Starting node for an attack tree
+     *
+     * @return true if the node is a root node, false otherwise
+     */
+    public boolean isRootNode() {
+        return this.beforeNodes.isEmpty() && !this.afterNodes.isEmpty();
+    }
+
+    /**
+     * Checks if the node is a leaf node
+     * A leaf node is a node that has no after nodes and has before nodes
+     * Ending node for an attack tree
+     *
+     * @return true if the node is a leaf node, false otherwise
+     */
+    public boolean isLeafNode() {
+        return !this.beforeNodes.isEmpty() && this.afterNodes.isEmpty();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

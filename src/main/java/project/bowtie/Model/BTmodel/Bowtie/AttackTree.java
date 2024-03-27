@@ -2,10 +2,10 @@ package project.bowtie.Model.BTmodel.Bowtie;
 
 import javafx.util.Pair;
 import project.bowtie.Model.BTmodel.Nodes.Node;
+import project.bowtie.Model.BTmodel.Nodes.NodeType;
 import project.bowtie.Model.BTmodel.Nodes.path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 
 /**
  * Attack Tree class - provides tree structure for before the Top-Event
@@ -244,14 +244,139 @@ public class AttackTree extends Tree {
     }
 
     public List<path> generateLogicalPaths() {
-
-
-
-
-
         return findPathsContainingAnd(findPathsFromTopEvent(this.TopEvent));
     }
 
+    public List<Object> retrieveAllAttacks() {
+        return retrieveAttacks(this.TopEvent, null);
+    }
 
+    // Recursive method to traverse the tree and retrieve attacks
+    private static List<Object> retrieveAttacks(Node node, String parentAndId) {
+        List<Object> paths = new ArrayList<>();
+
+        // Base case: if the node is a leaf node
+        if (node.isRootNode()) {
+            paths.add(node.getId());
+            return paths;
+        }
+
+        Map<String, Node> beforeNodes = node.getBeforeNodes();
+
+        if (node.getType() == NodeType.AND) {
+            String andId = "AND_" + UUID.randomUUID().toString(); // Unique identifier for this AND operation
+            List<List<Object>> combinedPaths = new ArrayList<>();
+            combinedPaths.add(new ArrayList<>()); // Start with a single empty path
+
+            for (Node child : beforeNodes.values()) {
+                List<Object> childPaths = retrieveAttacks(child, andId);
+                List<List<Object>> newCombinedPaths = new ArrayList<>();
+
+                for (List<Object> currentPath : combinedPaths) {
+                    for (Object childPath : childPaths) {
+                        List<Object> newPath = new ArrayList<>(currentPath);
+                        if (!(childPath instanceof String) || !newPath.isEmpty()) {
+                            // This check prevents adding unnecessary AND_JOIN markers
+                        }
+                        newPath.add(childPath);
+                        newCombinedPaths.add(newPath);
+                    }
+                }
+                combinedPaths = newCombinedPaths;
+            }
+
+            // If this AND operation is nested within another AND, wrap combinedPaths
+            if (parentAndId != null) {
+                List<Object> wrappedCombinedPaths = new ArrayList<>();
+                wrappedCombinedPaths.add(andId); // Start with AND identifier
+                wrappedCombinedPaths.addAll(combinedPaths);
+                paths.addAll(wrappedCombinedPaths);
+            } else {
+                paths.addAll(combinedPaths);
+            }
+        } else {
+            for (Node child : beforeNodes.values()) {
+                List<Object> childPaths = retrieveAttacks(child, parentAndId);
+                paths.addAll(childPaths);
+            }
+        }
+
+        // Prepend the current node only if it's not part of an AND operation
+        if (parentAndId == null) {
+            List<Object> newPath = new ArrayList<>();
+            newPath.add(node.getId());
+            newPath.add(paths);
+            return List.of(newPath);
+        } else {
+            return paths;
+        }
+    }
+
+    public List<String> generateAllPaths(){
+        System.out.println(generatePaths(this.TopEvent));
+        return generatePaths(this.TopEvent);
+    }
+
+    private List<String> generatePaths(Node node){
+        //return empty List if node is null
+        if (node == null) {
+            System.out.println("Node is null");
+            return new ArrayList<>();
+        }
+
+        // new paths list
+        List<String> paths = new ArrayList<>();
+
+        // if start point add to paths
+        if (node.isRootNode()){
+            paths.add(node.getId());
+        }
+
+        // if AND node
+        if (node.getType() == NodeType.AND){
+            // new child paths and get all children paths of AND
+            // List of each path associated with the child
+            Map<Node, List<String>> pathsFromChild = new HashMap<>();
+            for (Node child : node.getBeforeNodes().values()){
+                pathsFromChild.put(child, generatePaths(child));
+            }
+            paths.addAll(generatePathCombinations(pathsFromChild));
+
+
+        } else {
+            // for children of OR
+            for (Node child : node.getBeforeNodes().values()){
+                // for paths in the generated paths
+                List<String> newPaths = generatePaths(child);
+                for (String path : newPaths){
+                    paths.add(node.getId() + "<-" + path);
+                }
+            }
+        }
+        return paths;
+    }
+
+    public static List<String> generatePathCombinations(Map<Node, List<String>> pathsByNode) {
+        List<List<String>> allPaths = new ArrayList<>(pathsByNode.values());
+        List<String> combinations = new ArrayList<>();
+        combinePathsRecursive(allPaths, 0, "", combinations);
+        return combinations;
+    }
+
+    private static void combinePathsRecursive(List<List<String>> allPaths, int depth, String current, List<String> combinations) {
+        if (depth == allPaths.size()) {
+            combinations.add("AND(" + current + ")");
+            return;
+        }
+
+        for (String path : allPaths.get(depth)) {
+            combinePathsRecursive(
+                    allPaths,
+                    depth + 1,
+                    current.isEmpty() ? path : current + ", " + path,
+                    combinations
+            );
+        }
+    }
 
 }

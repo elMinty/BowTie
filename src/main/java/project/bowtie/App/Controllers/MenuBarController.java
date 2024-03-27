@@ -25,6 +25,7 @@ import project.bowtie.Model.BTmodel.Nodes.*;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.*;
 import java.io.*;
+import java.util.List;
 
 /**
  * Controller for the menu bar - handles save, open, screenshot, and close actions
@@ -214,8 +215,32 @@ public class MenuBarController{
      */
     public void handlePath(ActionEvent actionEvent) {
         // print TopEvent ID
-        this.viewPaneController.bowtie.attackTree.getPaths();
+        //this.viewPaneController.bowtie.attackTree.getPaths();
+        List<String> attacks = this.viewPaneController.bowtie.attackTree.generateAllPaths();
+        System.out.println(attacks);
     }
+
+
+    /**
+     * Handles the color action and changes the background colour
+     * @param e the action event
+     */
+    @FXML
+    private void handleColor(ActionEvent e) {
+        // get color from colour wheel
+        ColorPicker picker = new ColorPicker();
+        viewPaneRoot.getChildren().add(picker);
+        // Color change listener
+        picker.setOnAction(event -> {
+            // Remove the picker from its parent
+            viewPaneController.setColor(picker.getValue());
+            viewPaneRoot.getChildren().remove(picker);
+        });
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // @deprecated \\ - Needs some fixes
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Sets the zoom level of the view pane
@@ -239,6 +264,7 @@ public class MenuBarController{
     /**
      * Handles zoom actions from the menu items.
      * @param event the action event
+     * @deprecated
      */
     @FXML
     private void handleZoomAction(ActionEvent event) {
@@ -251,6 +277,11 @@ public class MenuBarController{
         }
     }
 
+    /**
+     *
+     * @param zoomFactor 0.5, 0.75, 1.0, 1.25, 1.5
+     * @deprecated
+     */
     private void applyZoomAndTranslation(double zoomFactor) {
 
         Point2D fixedPoint = new Point2D(0,0); // Fixed point (center of the view pane
@@ -278,22 +309,7 @@ public class MenuBarController{
         }
     }
 
-    /**
-     * Handles the color action
-     * @param e the action event
-     */
-    @FXML
-    private void handleColor(ActionEvent e) {
-        // get color from colour wheel
-        ColorPicker picker = new ColorPicker();
-        viewPaneRoot.getChildren().add(picker);
-        // Color change listener
-        picker.setOnAction(event -> {
-            // Remove the picker from its parent
-            viewPaneController.setColor(picker.getValue());
-            viewPaneRoot.getChildren().remove(picker);
-        });
-    }
+
 
 
 }
