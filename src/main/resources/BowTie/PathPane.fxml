@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.3" fx:id="pathPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="BowTie.Controllers.PathPaneController" prefHeight="10">
+    <items>
+        <TabPane fx:id="TabPane" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <tabs>
+                <Tab text="Path View" closable="false">
+                        <content>
+                            <SplitPane>
+                                <AnchorPane fx:id="leftPane">
+                                    <TabPane fx:id="mainTabPane" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                        <tabs>
+                                            <Tab text="Attacks" closable="false">
+                                                <content>
+                                                    <AnchorPane>
+                                                        <ListView fx:id="listViewAttacks" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                                                    </AnchorPane>
+                                                </content>
+                                            </Tab>
+                                            <Tab text="Consequences" closable="false">
+                                                <content>
+                                                    <AnchorPane>
+                                                        <ListView fx:id="listViewConsequences" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                                                    </AnchorPane>
+                                                </content>
+                                            </Tab>
+                                        </tabs>
+                                    </TabPane>
+                                </AnchorPane>
+                                <AnchorPane>
+                                    <Label text="Nodes Used" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" style="-fx-font-weight: bold;"/>
+                                    <ListView fx:id="availableNodes" AnchorPane.topAnchor="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                                </AnchorPane>
+                        </SplitPane>
+                        </content>
+                </Tab>
+                <Tab text="Nodes" closable="false">
+                    <content>
+                        <AnchorPane>
+                            <ListView fx:id="listViewNodes" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+
+        <AnchorPane fx:id="rightPane">
+            <TextArea fx:id="textArea" wrapText="true" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                <!-- Initial content can be set here or dynamically via the controller -->
+            </TextArea>
+        </AnchorPane>
+    </items>
+</SplitPane>
+
+

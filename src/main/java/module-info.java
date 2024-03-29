@@ -1,4 +1,4 @@
-module project.bowtie {
+module BowTie{
 
     requires java.xml.bind;
     requires javafx.controls;
@@ -13,15 +13,15 @@ module project.bowtie {
     requires org.kordamp.bootstrapfx.core;
     requires javafx.swing;
 
-    opens project.bowtie to javafx.fxml;
-    opens project.bowtie.IO to java.xml.bind;
-    exports project.bowtie;
-    opens project.bowtie.App.Controllers to javafx.fxml;
-    exports project.bowtie.App.Controllers.ViewPane;
-    opens project.bowtie.App.Controllers.ViewPane to javafx.fxml;
-    exports project.bowtie.App.Controllers;
-    exports project.bowtie.App.Controllers.ViewPane.Menus;
-    opens project.bowtie.App.Controllers.ViewPane.Menus to javafx.fxml;
-    exports project.bowtie.App.Controllers.PathPane;
-    opens project.bowtie.App.Controllers.PathPane to javafx.fxml;
+    opens BowTie to javafx.fxml;
+    opens BowTie.IO to java.xml.bind;
+    exports BowTie;
+
+    exports BowTie.Controllers.ViewPane;
+    opens BowTie.Controllers.ViewPane to javafx.fxml;
+    exports BowTie.Controllers;
+    opens BowTie.Controllers to javafx.fxml;
+    exports BowTie.Controllers.ViewPane.Menus;
+    opens BowTie.Controllers.ViewPane.Menus to javafx.fxml;
+
 }
