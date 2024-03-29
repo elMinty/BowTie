@@ -22,4 +22,6 @@ module project.bowtie {
     exports project.bowtie.App.Controllers;
     exports project.bowtie.App.Controllers.ViewPane.Menus;
     opens project.bowtie.App.Controllers.ViewPane.Menus to javafx.fxml;
+    exports project.bowtie.App.Controllers.PathPane;
+    opens project.bowtie.App.Controllers.PathPane to javafx.fxml;
 }

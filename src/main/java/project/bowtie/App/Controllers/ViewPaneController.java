@@ -3,10 +3,10 @@ package project.bowtie.App.Controllers;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import project.bowtie.App.Controllers.PathPane.PathPaneController;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.App.Controllers.ViewPane.Menus.ViewPaneContextMenu;
 import project.bowtie.Model.BTmodel.Bowtie.Bowtie;
@@ -35,11 +35,11 @@ public class ViewPaneController{
      * @param stage the stage
      */
     @FXML
-    public void initViewPane(Scene scene, Stage stage){
+    public void initViewPane(Scene scene, Stage stage, PathPaneController pathPaneController){
         this.scene = scene;
         this.stage = stage;
         this.setColor(Color.BLANCHEDALMOND);
-        nc = new NodeController(root);;
+        nc = new NodeController(root, pathPaneController);;
         setContextMenu();
         addTopEvent();
     }
@@ -72,8 +72,8 @@ public class ViewPaneController{
      * Sets to set position of the top event
      */
     private void addTopEvent() {
-        nc.handleAddNode(NodeType.TOP_EVENT, 500, 100);
-        topEvent = nc.getNode("0");
+        String id = nc.handleAddNode(NodeType.TOP_EVENT, 500, 100);
+        topEvent = nc.getNode(id);
         bowtie = new Bowtie(topEvent);
     }
 
@@ -82,10 +82,16 @@ public class ViewPaneController{
      * @param topEvent the top event
      */
     public void setTopEvent(Node topEvent){
-        //print the top event
-        System.out.println("Top Event setting: " + topEvent.getId());
         this.topEvent = topEvent;
         bowtie = new Bowtie(topEvent);
+    }
+
+    /**
+     * Get the top event
+     * @return the top event
+     */
+    public Node getTopEvent() {
+        return topEvent;
     }
 
     /**

@@ -2,6 +2,8 @@ package project.bowtie.Model.BTmodel.Bowtie;
 
 import project.bowtie.Model.BTmodel.Nodes.*;
 
+import java.util.*;
+
 /**
  * Consequence Tree class - provides tree structure for after the Top-Event
  * Used in the Bowtie Class
@@ -98,33 +100,117 @@ public class ConsequenceTree extends Tree {
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Depreceated Paths functions
+    // New Paths functions \\
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    /*public void generateConsequencePaths() {
-        List<path> paths = new ArrayList<>(); // List to store paths
-        for (Node leafNode : leafNodes.values()) {
-            findAllPaths(leafNode, new path(), paths);
-        }
-
-        // Sort the paths by size (from smallest to largest)
-        paths.sort((p1, p2) -> Integer.compare(p1.size(), p2.size()));
+    /**
+     * Generate all paths in the consequence tree
+     * @return List of all paths in the tree
+     */
+    public List<String> generateAllPaths(){
+        System.out.println(generatePaths(this.TopEvent));
+        return generatePaths(this.TopEvent);
     }
 
-    private void findAllPaths(Node current, path currentPath, List<path> paths) {
-        currentPath.addNode(current);
+    /**
+     * Generate all paths from a node in the tree
+     * @param node The node to generate paths from
+     * @return List of all paths in the tree from the node
+     */
+    private List<String> generatePaths(Node node){
+        //return empty List if node is null
+        if (node == null) {
+            System.out.println("Node is null");
+            return new ArrayList<>();
+        }
 
-        // Check if the current node is the top event (root node)
-        if (current.equals(this.TopEvent)) {
-            paths.add(new path(currentPath)); // Add a copy of the currentPath to the list of paths
+        // new paths list
+        List<String> paths = new ArrayList<>();
+
+        // if start point add to paths
+        if (node.isLeafNode()){
+            paths.add(node.getId());
+        }
+
+        // if AND node
+        if (node.getType() == NodeType.AND){
+            // new child paths and get all children paths of AND
+            // List of each path associated with the child
+
+            // Check Backwards children
+
+            List<String> backwardsChildren = new ArrayList<>();
+            for (Node child : node.getBeforeNodes().values()){
+                backwardsChildren.add(child.getId());
+            }
+
+            // make a string of the backwards children
+            String backwardsPath = "REQUIRES(" + String.join(", ", backwardsChildren) + ")";
+
+            // Check Forwards children
+
+            Map<Node, List<String>> forwardsChildren = new HashMap<>();
+            for (Node child : node.getAfterNodes().values()){
+                forwardsChildren.put(child, generatePaths(child));
+            }
+            List<String> new_paths = generatePathCombinations(forwardsChildren);
+
+            for (String path : new_paths){
+                path = backwardsPath + "->" + path;
+                paths.add(path);
+            }
+
+
+        } else {
+            // for children of OR
+            for (Node child : node.getAfterNodes().values()){
+                // for paths in the generated paths
+
+                List<String> newPaths = generatePaths(child);
+                if (child.getType() == NodeType.AND){
+                    paths.addAll(newPaths);
+                    continue;
+                }
+                for (String path : newPaths){
+                    paths.add(node.getId() + "->" + path);
+                }
+            }
+        }
+        return paths;
+    }
+
+    /**
+     * Generate all path combinations for an AND node
+     * @param pathsByNode Map of paths by node
+     * @return List of all path combinations
+     */
+    public static List<String> generatePathCombinations(Map<Node, List<String>> pathsByNode) {
+        List<List<String>> allPaths = new ArrayList<>(pathsByNode.values());
+        List<String> combinations = new ArrayList<>();
+        combinePathsRecursive(allPaths, 0, "", combinations);
+        return combinations;
+    }
+
+    /**
+     * Combine paths recursively to get an ALL list for paths from an AND node
+     * @param allPaths List of all paths
+     * @param depth Depth of the tree
+     * @param current Current path
+     * @param combinations List of all path combinations
+     */
+    private static void combinePathsRecursive(List<List<String>> allPaths, int depth, String current, List<String> combinations) {
+        if (depth == allPaths.size()) {
+            combinations.add("ALL(" + current + ")");
             return;
         }
 
-        // Recursively search for paths in each connected 'before' node
-        for (Node previousNode : current.getBeforeNodes().values()) {
-            path newPath = new path(); // Create a new path
-            newPath.addAll(currentPath); // Add all nodes from currentPath to newPath
-            findAllPaths(previousNode, newPath, paths);
+        for (String path : allPaths.get(depth)) {
+            combinePathsRecursive(
+                    allPaths,
+                    depth + 1,
+                    current.isEmpty() ? path : current + ", " + path,
+                    combinations
+            );
         }
-    }*/
+    }
 }

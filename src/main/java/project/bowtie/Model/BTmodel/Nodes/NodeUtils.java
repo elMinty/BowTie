@@ -34,7 +34,7 @@ public class NodeUtils {
      * -----------------
      * NodeType: AND
      * Preceding Nodes: ACTION, VULNERABILITY
-     * Succeeding Nodes: ACTION, THREAT, TOP EVENT
+     * Succeeding Nodes: ACTION, THREAT, TOP EVENT, EXPOSURE
      * Mitigator: NONE
      * -----------------
      * NodeType: ACTION
@@ -58,8 +58,8 @@ public class NodeUtils {
      * Mitigator: NONE
      * -----------------
      * NodeType: EXPOSURE
-     * Preceding Nodes: AND, ACTION, THREAT
-     * Succeeding Nodes: NONE
+     * Preceding Nodes: AND, ACTION, THREAT, TOP EVENT, EXPOSURE
+     * Succeeding Nodes: EXPOSURE, ACTION, AND
      * Mitigator: NONE
      * -----------------
      * NodeType: TOP EVENT
@@ -72,20 +72,20 @@ public class NodeUtils {
         // define valid relationships between nodes
         validPredecessors.put(NodeType.THREAT, EnumSet.of(NodeType.AND, NodeType.ACTION));
         validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY));
-        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT));
+        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
         validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
         validPredecessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
-        validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT));
+        validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION,NodeType.NONE));
 
         validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE));
-        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT));
+        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
         validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND));
         validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
         validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
-        validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.EXPOSURE, NodeType.ACTION, NodeType.AND));
         validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE,NodeType.ACTION, NodeType.EXPOSURE));
 
         validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
@@ -108,7 +108,6 @@ public class NodeUtils {
     public static Boolean connect(Node beforeNode, Node afterNode) {
 
         if (isValidTypeConnection(beforeNode.getType(), afterNode.getType()) && !areConnected(beforeNode, afterNode)) {
-            System.out.println("Connecting " + beforeNode.getName() + " to " + afterNode.getName());
             beforeNode.addAfterNode(afterNode);
             afterNode.addBeforeNode(beforeNode);
 
@@ -141,12 +140,10 @@ public class NodeUtils {
      */
     public static boolean disconnect(Node beforeNode, Node afterNode) {
         if (areConnected(beforeNode, afterNode)) {
-            System.out.println("Disconnecting " + beforeNode.getName() + " from " + afterNode.getName());
             beforeNode.removeAfterNode(afterNode);
             afterNode.removeBeforeNode(beforeNode);
             return true;
         }
-        System.out.println("Could not disconnect " + beforeNode.getName() + " from " + afterNode.getName());
         return false;
 
     }

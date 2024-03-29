@@ -2,7 +2,6 @@ package project.bowtie.App.Controllers;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -12,16 +11,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import project.bowtie.App.Controllers.PathPane.PathPaneController;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.IO.*;
 import project.bowtie.Model.BTmodel.Nodes.*;
-
 import javax.imageio.ImageIO;
 import javax.xml.parsers.*;
 import java.io.*;
@@ -41,15 +38,17 @@ public class MenuBarController{
     private NodeController nodeController;
     private ViewPaneController viewPaneController;
     private boolean closeFlag = false;
+    private PathPaneController pathPaneController;
 
     /**
      * Initializes the menu bar
      * @param scene the scene
      * @param stage the stage
      */
-    public void initMenuBar(Scene scene, Stage stage){
+    public void initMenuBar(Scene scene, Stage stage, PathPaneController pathPaneController){
         this.scene = scene;
         this.stage = stage;
+        this.pathPaneController = pathPaneController;
     }
 
     /**
@@ -185,19 +184,14 @@ public class MenuBarController{
                 ShapeImporter shapeImporter = new ShapeImporter();
                 // import the shapes from the XML file
                 Node topEvent = shapeImporter.importShapesFromXML(doc, viewPaneRoot, nodeController); // Call your export function
-                System.out.println("Top event: " + topEvent.getName());
 
                 // set the top event in the viewPaneController
                 if (viewPaneController != null && topEvent != null) {
                     viewPaneController.setTopEvent(topEvent);
-                    //print top event id
-                    System.out.println("Top event ID: " + topEvent.getId());
                 }
             } catch (SAXException | ParserConfigurationException | IOException e) {
                 throw new RuntimeException(e);
             }
-
-
         }
     }
 
@@ -214,10 +208,9 @@ public class MenuBarController{
      * @param actionEvent the action event
      */
     public void handlePath(ActionEvent actionEvent) {
-        // print TopEvent ID
-        //this.viewPaneController.bowtie.attackTree.getPaths();
+        List<String> consequences = this.viewPaneController.bowtie.consequenceTree.generateAllPaths();
         List<String> attacks = this.viewPaneController.bowtie.attackTree.generateAllPaths();
-        System.out.println(attacks);
+
     }
 
 
@@ -236,6 +229,9 @@ public class MenuBarController{
             viewPaneController.setColor(picker.getValue());
             viewPaneRoot.getChildren().remove(picker);
         });
+    }
+
+    public void handleValid(ActionEvent actionEvent) {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,8 +304,6 @@ public class MenuBarController{
             child.setLayoutY(newPosition.getY());
         }
     }
-
-
 
 
 }

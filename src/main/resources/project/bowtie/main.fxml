@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.SplitPane?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.bowtie.BTController">
    <top>
       <VBox prefHeight="17.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
@@ -14,12 +15,14 @@
       </VBox>
    </top>
    <center>
-        <ScrollPane  BorderPane.alignment="CENTER" fx:id="scrollPane" prefViewportHeight="400.0" prefViewportWidth="400.0">
-           <fx:include fx:id="viewPane" source="ViewPane.fxml" />
-        </ScrollPane>
-
+      <SplitPane orientation="VERTICAL" dividerPositions="0.7" BorderPane.alignment="CENTER"> <!-- Adjust dividerPositions as needed -->
+         <items>
+            <ScrollPane fx:id="scrollPane" prefViewportHeight="400.0" prefViewportWidth="400.0">
+               <fx:include fx:id="viewPane" source="ViewPane.fxml" />
+            </ScrollPane>
+            <fx:include fx:id="pathPane" source="PathPane.fxml" />
+         </items>
+      </SplitPane>
    </center>
-   <bottom>
-      <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>
+

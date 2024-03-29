@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<shapes>
+    <shape id="0" scaleX="1.0" scaleY="1.0" type="TOP_EVENT" x="533.0" y="282.0">
+        <node description="" id="0" name="TOP_EVENT0" score="" type="TOP_EVENT">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="11,22,14" size="3"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="10" scaleX="1.0" scaleY="1.0" type="AND" x="1059.0" y="234.0">
+        <node description="" id="10" name="AND10" score="" type="AND">
+            <beforeNodes keys="11,12" size="2"/>
+            <afterNodes keys="13" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="11" scaleX="1.0" scaleY="1.0" type="ACTION" x="844.0" y="256.0">
+        <node description="" id="11" name="ACTION11" score="" type="ACTION">
+            <beforeNodes keys="0" size="1"/>
+            <afterNodes keys="10" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="12" scaleX="1.0" scaleY="1.0" type="VULNERABILITY" x="906.0" y="146.0">
+        <node description="" id="12" name="VULNERABILITY12" score="" type="VULNERABILITY">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="10" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="13" scaleX="1.0" scaleY="1.0" type="THREAT" x="1165.0" y="55.0">
+        <node description="" id="13" name="THREAT13" score="" type="THREAT">
+            <beforeNodes keys="10" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="14" scaleX="1.0" scaleY="1.0" type="ACTION" x="795.0" y="397.0">
+        <node description="" id="14" name="ACTION14" score="" type="ACTION">
+            <beforeNodes keys="0" size="1"/>
+            <afterNodes keys="23,16,19" size="3"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="15" scaleX="1.0" scaleY="1.0" type="ACTION" x="1140.0" y="420.0">
+        <node description="" id="15" name="ACTION15" score="" type="ACTION">
+            <beforeNodes keys="16" size="1"/>
+            <afterNodes keys="17,18" size="2"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="16" scaleX="1.0" scaleY="1.0" type="AND" x="1053.0" y="469.0">
+        <node description="" id="16" name="AND16" score="" type="AND">
+            <beforeNodes keys="14" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="17" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1498.0" y="560.0">
+        <node description="" id="17" name="EXPOSURE17" score="" type="EXPOSURE">
+            <beforeNodes keys="15" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="18" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1439.0" y="613.0">
+        <node description="" id="18" name="EXPOSURE18" score="" type="EXPOSURE">
+            <beforeNodes keys="15" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="19" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1037.0" y="656.0">
+        <node description="" id="19" name="EXPOSURE19" score="" type="EXPOSURE">
+            <beforeNodes keys="14" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="22" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="806.0" y="656.0">
+        <node description="" id="22" name="EXPOSURE22" score="" type="EXPOSURE">
+            <beforeNodes keys="0" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="23" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="937.0" y="670.0">
+        <node description="" id="23" name="EXPOSURE23" score="" type="EXPOSURE">
+            <beforeNodes keys="14" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+</shapes>

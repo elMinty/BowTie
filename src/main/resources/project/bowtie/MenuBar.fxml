@@ -27,12 +27,20 @@
                 <MenuItem fx:id="screenshotMenuItem" text="Screenshot" onAction="#handleScreenshot" />
             </items>
             <items>
-                <MenuItem fx:id="PathMenuItem" text="Path" onAction="#handlePath" />
+                <MenuItem fx:id="PathMenuItem" text="Update Paths" onAction="#handlePath" />
             </items>
             <items>
                 <MenuItem fx:id="Background" text="Background Colour" onAction="#handleColor" />
             </items>
 
+        </Menu>
+        <Menu mnemonicParsing="false" text="Bowtie">
+            <items>
+                <MenuItem fx:id="updatePaths" text="Update Paths..." onAction="#handlePath"/>
+            </items>
+            <items>
+                <MenuItem fx:id="isValid" text="Is Valid?" onAction="#handleValid"/>
+            </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
             <items>

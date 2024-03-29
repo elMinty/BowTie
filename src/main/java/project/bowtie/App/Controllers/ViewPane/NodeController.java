@@ -1,9 +1,13 @@
 package project.bowtie.App.Controllers.ViewPane;
 
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+import project.bowtie.App.Controllers.PathPane.PathPaneController;
 import project.bowtie.App.Controllers.ViewPane.Menus.NodeContextMenu;
 import project.bowtie.App.Controllers.ViewPane.Menus.ViewOption;
 import project.bowtie.App.Controllers.ViewPane.Obj.Lines.Connector;
@@ -14,10 +18,7 @@ import project.bowtie.Model.BTmodel.Nodes.NodeType;
 import project.bowtie.Model.BTmodel.Nodes.NodeUtils;
 import project.bowtie.Model.BTmodel.Nodes.NodeDetail;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Controller for the nodes and shapes in the view pane
@@ -45,19 +46,21 @@ public class NodeController {
 
     Pane root;
     NodeContextMenu nodeContextMenu;
-    private Map<String, Node> nodeMap = new HashMap<String, Node>(); // Map of nodes
+    public Map<String, Node> nodeMap = new HashMap<String, Node>(); // Map of nodes
     private int nodeCount = 0; // Node count
     public Connector connector; // Connector for connecting nodes
     private String userInput = ""; // User input for editing node details
-
+    private PathPaneController PPC;
 
     /**
      * Constructor for the NodeController
      *
      * @param root the root pane
      */
-    public NodeController(AnchorPane root) {
+    public NodeController(AnchorPane root, PathPaneController pathPaneController) {
         this.root = root;
+        this.PPC = pathPaneController;
+        PPC.setNodeMap(nodeMap);
         nodeContextMenu = new NodeContextMenu(this);
         connector = new Connector(nodeMap);
     }
@@ -97,10 +100,12 @@ public class NodeController {
 
                 NodeLabel nameLabel = node.getNameLabel();
                 NodeLabel descriptionLabel = node.getDescriptionLabel();
+                PPC.updateNodeList(node.getId(), false);
                 nodeMap.remove(node.getId());
 
                 NodeUtils.delete(node);
                 root.getChildren().removeAll(shape, nameLabel, descriptionLabel);
+
             }
         }
     }
@@ -139,12 +144,14 @@ public class NodeController {
      * @see project.bowtie.Model.BTmodel.Nodes.NodeType
      * @see project.bowtie.App.Controllers.ViewPane.Obj.Nodes.NodeFactory
      */
-    public Shape handleAddNode(NodeType type, double x, double y) {
+    public String handleAddNode(NodeType type, double x, double y) {
 
         //init Node
         Shape shape = NodeFactory.createNode(type);
         setNodeListeners(shape);
-        Node node = new Node(String.valueOf(nodeCount), type, type.toString() + nodeCount);
+        int id = Objects.hash(shape, nodeCount,type, x, y);
+        Node node = new Node(String.valueOf(id), type, type.toString() + nodeCount);
+
 
         // Set the shape's position
         shape.setLayoutX(x);
@@ -170,7 +177,10 @@ public class NodeController {
         // Add the shape to the root
         root.getChildren().addAll(shape, infoLabel, nameLabel, scoreLabel);
 
-        return shape;
+        // Add the shape to the pathPaneView
+        PPC.updateNodeList(node.getId(), true);
+
+        return String.valueOf(id);
     }
 
     /**
@@ -322,12 +332,13 @@ public class NodeController {
         submitButton.setOnAction(event -> {
             // Get the text from the TextField
             this.userInput = textField.getText();
-
+            PPC.updateNodeList(node.getId(), false);
             // Set the node's name to the user input
             node.setName(userInput);
 
             // Set the label's text to the user input
             node.getNameLabel().setText(userInput);
+            PPC.updateNodeList(node.getId(), true);
 
             // Remove the TextField and Button from the scene
             root.getChildren().removeAll(textField, submitButton);
@@ -350,12 +361,12 @@ public class NodeController {
         submitButton.setOnAction(event -> {
             // Get the text from the TextField
             this.userInput = textField.getText();
-
+            PPC.updateNodeList(node.getId(), false);
             // Set the node's description to the user input
             node.setDescription(userInput);
             // Set the label's text to the user input
             node.getDescriptionLabel().setText(userInput);
-
+            PPC.updateNodeList(node.getId(), true);
             // Remove the TextField and Button from the scene
             root.getChildren().removeAll(textField, submitButton);
             resetUserInput();
@@ -373,7 +384,7 @@ public class NodeController {
     private void handleScoring(Shape shape) {
         Node node = (Node) shape.getUserData();
         NodeType type = node.getType();
-
+        PPC.updateNodeList(node.getId(), false);
         switch (type) {
             // Threat or Top Event
             case TOP_EVENT , THREAT:
@@ -410,6 +421,7 @@ public class NodeController {
             default:
                 break;
         }
+        PPC.updateNodeList(node.getId(), true);
     }
 
     /**
@@ -443,6 +455,7 @@ public class NodeController {
         // link pane and node
         shape.setId(node.getId());
         nodeMap.put(node.getId(), node);
+        PPC.updateNodeList(node.getId(), true);
 
         //init labels
         NodeLabel nameLabel = new NodeLabel(Name, shape, NodeDetail.NAME, type);
@@ -494,5 +507,14 @@ public class NodeController {
         });
 
         // The rest of your listener setup remains the same
+    }
+
+    /**
+     * Gets the node map
+     *
+     * @return the node map
+     */
+    public Map<String, Node> getMap() {
+        return nodeMap;
     }
 }

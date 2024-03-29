@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import project.bowtie.App.Controllers.MenuBarController;
+import project.bowtie.App.Controllers.PathPane.PathPaneController;
 import project.bowtie.App.Controllers.ViewPaneController;
 
 
@@ -22,12 +24,15 @@ public class BTController{
 
     public AnchorPane viewPane;
     public MenuBar menuBar;
+    public SplitPane pathPane;
     private Scene scene;
 
 
     // FXML elements
     @FXML private MenuBarController menuBarController;
     @FXML private ViewPaneController viewPaneController;
+    @FXML private PathPaneController pathPaneController;
+
 
     @FXML private ScrollPane scrollPane;
 
@@ -37,16 +42,15 @@ public class BTController{
      *
      * @param stage app stage
      * @param scene app scene
-     *
      */
     public void initController(Scene scene, Stage stage) {
         this.scene = scene;
-        if (viewPaneController != null) {
-            viewPaneController.initViewPane(scene, stage);
-
+        if (viewPaneController != null ) {
+            pathPaneController.initialize();
+            viewPaneController.initViewPane(scene, stage, pathPaneController);
         }
         if (menuBarController != null) {
-            menuBarController.initMenuBar(scene, stage);
+            menuBarController.initMenuBar(scene, stage, pathPaneController);
             menuBarController.setViewPaneRoot(viewPaneController.root, scrollPane);
             menuBarController.setNodeController(viewPaneController.nc);
             menuBarController.setVPC(viewPaneController);

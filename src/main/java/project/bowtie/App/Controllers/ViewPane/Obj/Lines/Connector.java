@@ -99,7 +99,6 @@ public class Connector {
                 }
                 break;
             case NONE:
-                System.out.println("Invalid connection");
                 connectAlert(ConnectionMode.NONE);
                 break;
             case DISCONNECT:

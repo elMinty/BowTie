@@ -123,7 +123,7 @@ public class NodeLabel extends Label{
 
     public void toggleLabelVisibility(ViewOption viewOption) {
 
-        System.out.println(viewOption);
+
         switch(viewOption) {
             case ALWAYS -> {
 
