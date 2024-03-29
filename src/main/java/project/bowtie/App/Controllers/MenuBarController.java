@@ -21,7 +21,9 @@ import project.bowtie.IO.*;
 import project.bowtie.Model.BTmodel.Nodes.*;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.*;
+import java.awt.*;
 import java.io.*;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -210,7 +212,9 @@ public class MenuBarController{
     public void handlePath(ActionEvent actionEvent) {
         List<String> consequences = this.viewPaneController.bowtie.consequenceTree.generateAllPaths();
         List<String> attacks = this.viewPaneController.bowtie.attackTree.generateAllPaths();
-
+        List<List<Integer>> attackPathIDs = this.viewPaneController.bowtie.attackTree.generatePathIDs();
+        List<List<Integer>> consequencePathIDs = this.viewPaneController.bowtie.consequenceTree.generatePathIDs();
+        pathPaneController.updatePathMaps(attacks, consequences, attackPathIDs, consequencePathIDs);
     }
 
 
@@ -306,4 +310,13 @@ public class MenuBarController{
     }
 
 
+    @FXML
+    private void handleOpenLinkAction() {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(new URI("https://github.com/elMinty/BowTie"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

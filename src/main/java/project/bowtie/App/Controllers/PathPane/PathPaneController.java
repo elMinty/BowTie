@@ -9,8 +9,11 @@ import javafx.scene.layout.AnchorPane;
 import project.bowtie.App.Controllers.ViewPane.NodeController;
 import project.bowtie.Model.BTmodel.Nodes.Node;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * PathController class
@@ -40,8 +43,12 @@ public class PathPaneController {
     private NodeController nc;
     private Node TopEvent;
     private Map<String, Node> map;
-    private Map<String, String> attackPathMap;
-    private Map<String, String> consequencePathMap;
+
+    public Map<String, String> attackMap = new HashMap<String, String>();
+    public Map<String, String> consequenceMap = new HashMap<String, String>();
+
+    public Map<String, List<Integer>> attackMapIds = new HashMap<String, List<Integer>>();
+    public Map<String, List<Integer>> consequenceMapIds = new HashMap<String, List<Integer>>();
 
     /**
      * Initializes the PathPane
@@ -63,17 +70,36 @@ public class PathPaneController {
             }
         });
 
+        availableNodes.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                String id = newValue.toString().split(": ")[1];
+                updateNodeTextArea(map.get(id));
+            }
+        });
+
         listViewAttacks.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                String id = newValue.split(":")[0];
-                updateAttackPathTextArea(attackPathMap.get(id));
+                String id = newValue.split(": ")[0];
+                updateAttackPathTextArea(attackMap.get(id));
+                availableNodes.getItems().clear();
+                for (int i : attackMapIds.get(id)) {
+                    String idString = String.valueOf(i);
+                    String name = map.get(idString).getName();
+                    availableNodes.getItems().add(name + " : " + idString);
+                }
             }
         });
 
         listViewConsequences.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                String id = newValue.split(":")[0];
-                updateNodeTextArea(map.get(id));
+                String id = newValue.split(": ")[0];
+                updateConsequencePathTextArea(consequenceMap.get(id));
+                availableNodes.getItems().clear();
+                for (int i : consequenceMapIds.get(id)) {
+                    String idString = String.valueOf(i);
+                    String name = map.get(idString).getName();
+                    availableNodes.getItems().add(name + " : " + idString);
+                }
             }
         });
     }
@@ -101,8 +127,17 @@ public class PathPaneController {
 
     private void updateAttackPathTextArea(String attackPath) {
         textArea.clear();
+        attackPath = replaceIDs(attackPath);
         // Construct the text to display based on the selected node
-        String displayText = "Attack Path: " + attackPath;
+        String displayText = "Attack Path:\n\n\t\t" + attackPath.replace("\n", "\n\t\t") + "\n\n\n";
+        textArea.setText(displayText);
+    }
+
+    private void updateConsequencePathTextArea(String consequencePath) {
+        textArea.clear();
+        consequencePath = replaceIDs(consequencePath);
+        // Construct the text to display based on the selected node
+        String displayText = "Consequence Path:\n\n\t\t" + consequencePath.replace("\n", "\n\t\t") + "\n\n\n";
         textArea.setText(displayText);
     }
 
@@ -135,25 +170,32 @@ public class PathPaneController {
      * Update path maps for attacks and consequences
      * @param attackPathMap the attack path map
      */
-    public void updatePathMaps(Map<String, String> attackPathMap, Map<String, String> consequencePathMap) {
+    public void updatePathMaps(List<String> attackPathMap, List<String> consequencePathMap, List<List<Integer>> attackPath, List<List<Integer>> consequencePath) {
+        // Clear the text area and list views
         textArea.clear();
-        this.attackPathMap = attackPathMap;
-        this.consequencePathMap = consequencePathMap;
-
         listViewAttacks.getItems().clear();
         listViewConsequences.getItems().clear();
 
-        for (String id : attackPathMap.keySet()) {
-            String listName = id + ": " + attackPathMap.get(id);
-            listViewAttacks.getItems().add(listName);
-        }
-        for (String id : consequencePathMap.keySet()) {
-            String listName = id + ": " + consequencePathMap.get(id);
-            listViewConsequences.getItems().add(listName);
-        }
-    }
+        //clear maps
+        attackMap.clear();
+        consequenceMap.clear();
 
-    private void updateConsequenceTextArea(Node node) {
+        listViewAttacks.getItems().clear();
+        listViewConsequences.getItems().clear();
+        int counter = 0;
+        for (String attack : attackPathMap) {
+            listViewAttacks.getItems().add(String.valueOf(counter));
+            attackMap.put(Integer.toString(counter), attack);
+            attackMapIds.put(Integer.toString(counter), attackPath.get(counter));
+            counter++;
+        }
+        int counter2 = 0;
+        for (String consequence : consequencePathMap) {
+            listViewConsequences.getItems().add(String.valueOf(counter2));
+            consequenceMap.put(Integer.toString(counter2), consequence);
+            consequenceMapIds.put(Integer.toString(counter2), consequencePath.get(counter2));
+            counter2++;
+        }
     }
 
     /**
@@ -179,5 +221,24 @@ public class PathPaneController {
         return builder.toString();
     }
 
+    public String replaceIDs(String path) {
+        // Pattern to match integer IDs
+        Pattern pattern = Pattern.compile("\\b\\d+\\b");
+        Matcher matcher = pattern.matcher(path);
+        StringBuffer sb = new StringBuffer();
 
+        while (matcher.find()) {
+            Integer id = Integer.valueOf(matcher.group());
+            if (map.containsKey(String.valueOf(id))) {
+                String replacement = map.get(String.valueOf(id)).getName(); // Use the ID from map, or original if not found
+                matcher.appendReplacement(sb, replacement);
+            }
+            else {
+                matcher.appendReplacement(sb, matcher.group());
+            }
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
+    }
 }

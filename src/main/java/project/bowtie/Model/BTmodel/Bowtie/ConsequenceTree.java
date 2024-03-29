@@ -3,6 +3,8 @@ package project.bowtie.Model.BTmodel.Bowtie;
 import project.bowtie.Model.BTmodel.Nodes.*;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Consequence Tree class - provides tree structure for after the Top-Event
@@ -13,6 +15,9 @@ import java.util.*;
  */
 public class ConsequenceTree extends Tree {
     private static ConsequenceTree instance;
+    private List<String> consequences;
+    private static final Map<String, String> allOperations = new LinkedHashMap<>();
+    private int counter;
 
     /**
      * Constructor for the ConsequenceTree class
@@ -109,7 +114,12 @@ public class ConsequenceTree extends Tree {
      */
     public List<String> generateAllPaths(){
         System.out.println(generatePaths(this.TopEvent));
-        return generatePaths(this.TopEvent);
+        consequences = generatePaths(this.TopEvent);
+        List<String> paths = new ArrayList<>();
+        for (String path : consequences) {
+            paths.add(formatConsequencePath(path));
+        }
+        return paths;
     }
 
     /**
@@ -212,5 +222,60 @@ public class ConsequenceTree extends Tree {
                     combinations
             );
         }
+    }
+
+    public List<List<Integer>> generatePathIDs() {
+        List<List<Integer>> paths = new ArrayList<>();
+        for (String attack : consequences) {
+            paths.add(extractIDs(attack));
+        }
+        return paths;
+    }
+
+    private static List<Integer> extractIDs(String path) {
+        List<Integer> integers = new ArrayList<>();
+        Pattern pattern = Pattern.compile("-?\\d+"); // Regex to match integers
+        Matcher matcher = pattern.matcher(path);
+        while (matcher.find()) {
+            integers.add(Integer.parseInt(matcher.group()));
+        }
+        return integers;
+    }
+
+    public String formatConsequencePath(String path) {
+        allOperations.clear();
+        counter = 1;
+        StringBuilder output = new StringBuilder("Path: ");
+        output.append(parseSegment(path, counter)).append("\n");
+
+        allOperations.forEach((key, value) -> output.append("\n\t").append(key).append(": ").append(value));
+        return output.toString();
+    }
+
+    private String parseSegment(String segment, int level) {
+        Pattern pattern = Pattern.compile("REQUIRES\\(([^)]+)\\)|ALL\\(([^)]+)\\)");
+        Matcher matcher = pattern.matcher(segment);
+        StringBuilder formattedSegment = new StringBuilder();
+        int lastEnd = 0;
+
+        while (matcher.find()) {
+            formattedSegment.append(segment, lastEnd, matcher.start());
+
+            String operationContents = matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+            String operation = segment.substring(matcher.start(), segment.indexOf('(', matcher.start())) + "@" + counter++;
+
+            formattedSegment.append(operation);
+            allOperations.put(operation, operationContents.replace("->", " -> "));
+            System.out.println(operationContents);
+
+            lastEnd = matcher.end();
+        }
+
+        // Add any remaining part of the segment after the last operation
+        if (lastEnd < segment.length()) {
+            formattedSegment.append(segment.substring(lastEnd).replace("->", " -> "));
+        }
+
+        return formattedSegment.toString();
     }
 }

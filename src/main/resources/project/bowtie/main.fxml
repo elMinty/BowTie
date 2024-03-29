@@ -15,12 +15,12 @@
       </VBox>
    </top>
    <center>
-      <SplitPane orientation="VERTICAL" dividerPositions="0.7" BorderPane.alignment="CENTER"> <!-- Adjust dividerPositions as needed -->
+      <SplitPane orientation="VERTICAL" dividerPositions="0.2" BorderPane.alignment="CENTER"> <!-- Adjust dividerPositions as needed -->
          <items>
-            <ScrollPane fx:id="scrollPane" prefViewportHeight="400.0" prefViewportWidth="400.0">
+            <ScrollPane fx:id="scrollPane">
                <fx:include fx:id="viewPane" source="ViewPane.fxml" />
             </ScrollPane>
-            <fx:include fx:id="pathPane" source="PathPane.fxml" />
+            <fx:include fx:id="pathPane" source="PathPane.fxml" prefHeight="100" />
          </items>
       </SplitPane>
    </center>

@@ -27,9 +27,6 @@
                 <MenuItem fx:id="screenshotMenuItem" text="Screenshot" onAction="#handleScreenshot" />
             </items>
             <items>
-                <MenuItem fx:id="PathMenuItem" text="Update Paths" onAction="#handlePath" />
-            </items>
-            <items>
                 <MenuItem fx:id="Background" text="Background Colour" onAction="#handleColor" />
             </items>
 
@@ -42,9 +39,9 @@
                 <MenuItem fx:id="isValid" text="Is Valid?" onAction="#handleValid"/>
             </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Help">
+        <Menu mnemonicParsing="false" text="Help" >
             <items>
-                <MenuItem mnemonicParsing="false" text="About" />
+                <MenuItem mnemonicParsing="false" text="About" onAction="#handleOpenLinkAction"/>
             </items>
         </Menu>
 <!--        <Menu fx:id="zoomMenu" text="Zoom">-->

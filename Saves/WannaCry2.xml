@@ -37,7 +37,7 @@
     </shape>
     <shape id="6" scaleX="1.0" scaleY="1.0" type="ACTION" x="528.0" y="836.0">
         <node description="" id="6" name="ACTION6" score="" type="ACTION">
-            <beforeNodes keys="" size="0"/>
+            <beforeNodes keys="1017393368" size="1"/>
             <afterNodes keys="5" size="1"/>
             <mitigationNodes keys="" size="0"/>
         </node>
@@ -130,6 +130,27 @@
         <node description="" id="-280610204" name="VULNERABILITY21" score="" type="VULNERABILITY">
             <beforeNodes keys="" size="0"/>
             <afterNodes keys="2" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="70729215" scaleX="1.0" scaleY="1.0" type="ACTION" x="124.0" y="943.0">
+        <node description="" id="70729215" name="ACTION20" score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="1017393368" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1017393368" scaleX="1.0" scaleY="1.0" type="AND" x="414.0" y="1077.0">
+        <node description="" id="1017393368" name="AND21" score="" type="AND">
+            <beforeNodes keys="70729215,1288145644" size="2"/>
+            <afterNodes keys="6" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1288145644" scaleX="1.0" scaleY="1.0" type="VULNERABILITY" x="309.0" y="1278.0">
+        <node description="" id="1288145644" name="VULNERABILITY22" score="" type="VULNERABILITY">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="1017393368" size="1"/>
             <mitigationNodes keys="" size="0"/>
         </node>
     </shape>
