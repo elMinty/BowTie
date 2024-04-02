@@ -32,7 +32,7 @@ public class NodeUtils {
      * Mitigator: NONE
      * -----------------
      * NodeType: AND
-     * Preceding Nodes: ACTION, VULNERABILITY, AND
+     * Preceding Nodes: ACTION, VULNERABILITY, AND, THREAT, TOP-EVENT
      * Succeeding Nodes: ACTION, THREAT, TOP EVENT, EXPOSURE
      * Mitigator: NONE
      * -----------------
@@ -70,7 +70,7 @@ public class NodeUtils {
     static {
         // define valid relationships between nodes
         validPredecessors.put(NodeType.THREAT, EnumSet.of(NodeType.AND, NodeType.ACTION));
-        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY, NodeType.THREAT));
+        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY, NodeType.THREAT, NodeType.TOP_EVENT));
         validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
         validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
@@ -85,7 +85,7 @@ public class NodeUtils {
         validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
         validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
         validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.EXPOSURE, NodeType.ACTION, NodeType.AND));
-        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE,NodeType.ACTION, NodeType.EXPOSURE));
+        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE,NodeType.ACTION, NodeType.EXPOSURE, NodeType.AND));
 
         validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
         validMitigator.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.MITIGATION));
