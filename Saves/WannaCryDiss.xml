@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<shapes>
+    <shape id="1205037326" scaleX="1.0" scaleY="1.0" type="TOP_EVENT" x="499.0" y="264.0">
+        <node description="" id="1205037326" name="DoS of NHS Services" score="" type="TOP_EVENT">
+            <beforeNodes keys="-1921890021" size="1"/>
+            <afterNodes keys="1553244075,-1995402030" size="2"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-1921890021" scaleX="1.0" scaleY="1.0" type="AND" x="439.0" y="407.0">
+        <node description="" id="-1921890021" name="AND2" score="" type="AND">
+            <beforeNodes keys="161001582,565708654,-663322150,222069311" size="4"/>
+            <afterNodes keys="1205037326" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1553244075" scaleX="1.0" scaleY="1.0" type="ACTION" x="660.0" y="288.0">
+        <node description="" id="1553244075" name="Ransom Held for Fee" score="" type="ACTION">
+            <beforeNodes keys="1205037326" size="1"/>
+            <afterNodes keys="-2051571793,121808163" size="2"/>
+            <mitigationNodes keys="670192021" size="1"/>
+        </node>
+    </shape>
+    <shape id="670192021" scaleX="1.0" scaleY="1.0" type="MITIGATION" x="711.0" y="222.0">
+        <node description="" id="670192021" name="Effective Back-up Services" score="" type="MITIGATION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="1900339889" size="1"/>
+        </node>
+    </shape>
+    <shape id="1900339889" scaleX="1.0" scaleY="1.0" type="COUNTER_MITIGATION" x="709.0" y="116.0">
+        <node description="" id="1900339889" name="Back-up services compromised" score="" type="COUNTER_MITIGATION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-1995402030" scaleX="1.0" scaleY="1.0" type="ACTION" x="665.0" y="444.0">
+        <node description="" id="-1995402030" name="Attacker never releases ransom" score="" type="ACTION">
+            <beforeNodes keys="1205037326" size="1"/>
+            <afterNodes keys="-1649956692" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-1649956692" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="848.0" y="527.0">
+        <node description="" id="-1649956692" name="Other Consequences" score="" type="EXPOSURE">
+            <beforeNodes keys="-1995402030" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-2051571793" scaleX="1.0" scaleY="1.0" type="ACTION" x="826.0" y="220.0">
+        <node description="" id="-2051571793" name="Pay Ransom (End DoS)" score="" type="ACTION">
+            <beforeNodes keys="1553244075" size="1"/>
+            <afterNodes keys="1082712175,557297262" size="2"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="121808163" scaleX="1.0" scaleY="1.0" type="ACTION" x="845.0" y="348.0">
+        <node description="" id="121808163" name="Try Work Around" score="" type="ACTION">
+            <beforeNodes keys="1553244075" size="1"/>
+            <afterNodes keys="-1025120186" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="557297262" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1011.0" y="223.0">
+        <node description="" id="557297262" name="Ransomware works!!" score="" type="EXPOSURE">
+            <beforeNodes keys="-2051571793" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1082712175" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1011.0" y="303.0">
+        <node description="" id="1082712175" name="Financial damages" score="" type="EXPOSURE">
+            <beforeNodes keys="-2051571793" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-1025120186" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1017.0" y="395.0">
+        <node description="" id="-1025120186" name="Ambulance Service Down" score="" type="EXPOSURE">
+            <beforeNodes keys="121808163" size="1"/>
+            <afterNodes keys="617382308,-491650234" size="2"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-491650234" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1175.0" y="471.0">
+        <node description="" id="-491650234" name="Lives Risked" score="" type="EXPOSURE">
+            <beforeNodes keys="-1025120186" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="617382308" scaleX="1.0" scaleY="1.0" type="ACTION" x="1129.0" y="312.0">
+        <node description="" id="617382308" name="Re-direct of Ambulances" score="" type="ACTION">
+            <beforeNodes keys="-1025120186" size="1"/>
+            <afterNodes keys="-854862649" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-854862649" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1300.0" y="351.0">
+        <node description="" id="-854862649" name="Work Priorities changed" score="" type="EXPOSURE">
+            <beforeNodes keys="617382308" size="1"/>
+            <afterNodes keys="1616854726" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="1616854726" scaleX="1.0" scaleY="1.0" type="EXPOSURE" x="1381.0" y="291.0">
+        <node description="" id="1616854726" name="Cancelled Appointments!!" score="" type="EXPOSURE">
+            <beforeNodes keys="-854862649" size="1"/>
+            <afterNodes keys="" size="0"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="222069311" scaleX="1.0" scaleY="1.0" type="THREAT" x="250.0" y="175.0">
+        <node description="" id="222069311" name="Privelege Escelation" score="" type="THREAT">
+            <beforeNodes keys="-1060416770" size="1"/>
+            <afterNodes keys="-1921890021" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-663322150" scaleX="1.0" scaleY="1.0" type="THREAT" x="249.0" y="301.0">
+        <node description="" id="-663322150" name="Installing software (Tampering)" score="" type="THREAT">
+            <beforeNodes keys="290203136" size="1"/>
+            <afterNodes keys="-1921890021" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="161001582" scaleX="1.0" scaleY="1.0" type="ACTION" x="171.0" y="521.0">
+        <node description="" id="161001582" name="Implement worm tool" score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="-1921890021" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="565708654" scaleX="1.0" scaleY="1.0" type="VULNERABILITY" x="344.0" y="601.0">
+        <node description="" id="565708654" name="Some network vulnerability" score="" type="VULNERABILITY">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="-1921890021" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="-1060416770" scaleX="1.0" scaleY="1.0" type="ACTION" x="101.0" y="265.0">
+        <node description="" id="-1060416770" name="Double Pulsar " score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="222069311" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+    <shape id="290203136" scaleX="1.0" scaleY="1.0" type="ACTION" x="99.0" y="398.0">
+        <node description="" id="290203136" name="Eternal Blue" score="" type="ACTION">
+            <beforeNodes keys="" size="0"/>
+            <afterNodes keys="-663322150" size="1"/>
+            <mitigationNodes keys="" size="0"/>
+        </node>
+    </shape>
+</shapes>

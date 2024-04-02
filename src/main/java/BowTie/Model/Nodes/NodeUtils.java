@@ -28,11 +28,11 @@ public class NodeUtils {
      * -----------------
      * NodeType: THREAT
      * Preceding Nodes: AND, ACTION
-     * Succeeding Nodes: ACTION, EXPOSURE, NONE
+     * Succeeding Nodes: ACTION, EXPOSURE, AND, NONE
      * Mitigator: NONE
      * -----------------
      * NodeType: AND
-     * Preceding Nodes: ACTION, VULNERABILITY
+     * Preceding Nodes: ACTION, VULNERABILITY, AND
      * Succeeding Nodes: ACTION, THREAT, TOP EVENT, EXPOSURE
      * Mitigator: NONE
      * -----------------
@@ -70,7 +70,7 @@ public class NodeUtils {
     static {
         // define valid relationships between nodes
         validPredecessors.put(NodeType.THREAT, EnumSet.of(NodeType.AND, NodeType.ACTION));
-        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY));
+        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY, NodeType.THREAT));
         validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
         validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
@@ -78,7 +78,7 @@ public class NodeUtils {
         validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION,NodeType.NONE));
 
-        validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE));
+        validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE, NodeType.AND));
         validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
         validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND));

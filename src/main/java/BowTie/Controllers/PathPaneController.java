@@ -97,7 +97,9 @@ public class PathPaneController {
                 availableNodes.getItems().clear();
                 for (int i : consequenceMapIds.get(id)) {
                     String idString = String.valueOf(i);
+
                     String name = map.get(idString).getName();
+                    System.out.println("Name: " + name + "ID: " + idString);
                     availableNodes.getItems().add(name + " : " + idString);
                 }
             }
@@ -223,7 +225,7 @@ public class PathPaneController {
 
     public String replaceIDs(String path) {
         // Pattern to match integer IDs
-        Pattern pattern = Pattern.compile("\\b\\d+\\b");
+        Pattern pattern = Pattern.compile("-?\\b\\d+\\b");
         Matcher matcher = pattern.matcher(path);
         StringBuffer sb = new StringBuffer();
 
