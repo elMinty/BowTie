@@ -37,7 +37,7 @@ public class NodeUtils {
      * Mitigator: NONE
      * -----------------
      * NodeType: ACTION
-     * Preceding Nodes: ACTION, THREAT, AND, VULNERABILITY, NONE
+     * Preceding Nodes: ACTION, THREAT, AND, VULNERABILITY, Top-event,NONE
      * Succeeding Nodes: ACTION, THREAT, AND, EXPOSURE, TOP EVENT
      * Mitigator: Mitigation
      * -----------------
@@ -77,7 +77,7 @@ public class NodeUtils {
         validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validMitigator.put(NodeType.AND, EnumSet.of(NodeType.NONE));
 
-        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE));
+        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT));
         validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
         validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
 
