@@ -43,8 +43,8 @@ public class NodeUtils {
      * -----------------
      * NodeType: VULNERABILITY
      * Preceding Nodes: NONE
-     * Succeeding Nodes: AND
-     * Mitigator: Mitigation
+     * Succeeding Nodes: AND, ACTION
+     * Mitigator:None
      * -----------------
      * NodeType: MITIGATION
      * Preceding Nodes: NONE
@@ -62,38 +62,46 @@ public class NodeUtils {
      * Mitigator: NONE
      * -----------------
      * NodeType: TOP EVENT
-     * Preceding Nodes: AND, ACTION, NONE
-     * Succeeding Nodes: NONE
+     * Preceding Nodes: AND, ACTION
+     * Succeeding Nodes: ACTION, EXPOSURE, AND
      * Mitigator: NONE
      *
      */
     static {
         // define valid relationships between nodes
         validPredecessors.put(NodeType.THREAT, EnumSet.of(NodeType.AND, NodeType.ACTION));
-        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY, NodeType.THREAT, NodeType.TOP_EVENT));
-        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE, NodeType.TOP_EVENT, NodeType.EXPOSURE));
-        validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
-        validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
-        validPredecessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
-        validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
-        validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION,NodeType.NONE));
-
         validSuccessors.put(NodeType.THREAT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.NONE, NodeType.AND));
-        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
-        validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
-        validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND));
-        validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
-        validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
-        validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.EXPOSURE, NodeType.ACTION, NodeType.AND));
-        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE,NodeType.ACTION, NodeType.EXPOSURE, NodeType.AND));
-
-        validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
-        validMitigator.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.MITIGATION));
-        validMitigator.put(NodeType.MITIGATION, EnumSet.of(NodeType.COUNTER_MITIGATION));
         validMitigator.put(NodeType.THREAT, EnumSet.of(NodeType.NONE));
+
+        validPredecessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.VULNERABILITY, NodeType.AND, NodeType.THREAT, NodeType.TOP_EVENT));
+        validSuccessors.put(NodeType.AND, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
         validMitigator.put(NodeType.AND, EnumSet.of(NodeType.NONE));
-        validMitigator.put(NodeType.EXPOSURE, EnumSet.of(NodeType.NONE));
+
+        validPredecessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.VULNERABILITY, NodeType.NONE));
+        validSuccessors.put(NodeType.ACTION, EnumSet.of(NodeType.ACTION, NodeType.THREAT, NodeType.AND, NodeType.EXPOSURE, NodeType.TOP_EVENT));
+        validMitigator.put(NodeType.ACTION, EnumSet.of(NodeType.MITIGATION));
+
+        validPredecessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.AND, NodeType.ACTION));
+        validMitigator.put(NodeType.VULNERABILITY, EnumSet.of(NodeType.NONE));
+
+        validPredecessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.MITIGATION, EnumSet.of(NodeType.NONE));
+        validMitigator.put(NodeType.MITIGATION, EnumSet.of(NodeType.COUNTER_MITIGATION));
+
+        validPredecessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
+        validSuccessors.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
         validMitigator.put(NodeType.COUNTER_MITIGATION, EnumSet.of(NodeType.NONE));
+
+        validPredecessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.AND, NodeType.ACTION, NodeType.THREAT, NodeType.TOP_EVENT, NodeType.EXPOSURE));
+        validSuccessors.put(NodeType.EXPOSURE, EnumSet.of(NodeType.EXPOSURE, NodeType.ACTION, NodeType.AND));
+        validMitigator.put(NodeType.EXPOSURE, EnumSet.of(NodeType.NONE));
+
+        validPredecessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.AND, NodeType.ACTION));
+        validSuccessors.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.ACTION, NodeType.EXPOSURE, NodeType.AND));
+        validMitigator.put(NodeType.TOP_EVENT, EnumSet.of(NodeType.NONE));
+
+
 
     }
 
